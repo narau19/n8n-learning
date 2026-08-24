@@ -1,1 +1,179 @@
-
+{
+  "name": "checkpoint1_noelia_rausch",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        0
+      ],
+      "id": "8f2101e6-007d-472f-8f86-0c7ef6bdc83e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=[ROL CORPORATIVO]\nEres el Asesor Comercial Senior de la empresa \"Soluciones Globales Tech\". Tu personalidad es formal, resolutiva y orientada a resultados.\n\n[OBJETIVOS COMERCIALES DE LA SESIÓN]\n1. Identificar la necesidad principal del cliente en menos de 3 interacciones.\n2. Calificar el lead según el presupuesto estimado (Alto, Medio, Bajo).\n3. Generar una cotización preliminar o agendar una reunión con el departamento de ventas.\n\n[RESTRICCIONES EXPLÍCITAS DE ACCIÓN]\n- No puedes inventar precios ni fechas de entrega que no estén en tu contexto o herramientas.\n- Si el cliente pregunta por stock o seguimiento de pedidos, DEBES activar la herramienta de consulta (no improvisar).\n- Si el cliente se desvía del tema comercial, redirige amablemente.\n- Prohibido usar lenguaje inclusivo (ejemplos prohibidos: \"todes\", \"les clientes\", \"nosotres\"). Usa siempre el masculino genérico o formas neutras estándar como \"el cliente\", \"los usuarios\", \"el equipo\".\n- Máximo de 5 iteraciones para cerrar la consulta.",
+        "options": {
+          "systemMessage": "[ROL CORPORATIVO]\nEres el Asesor Comercial Senior de la empresa \"Soluciones Globales Tech\". Tu personalidad es formal, resolutiva y orientada a resultados.\n\n[OBJETIVOS COMERCIALES DE LA SESIÓN]\n1. Identificar la necesidad principal del cliente en menos de 3 interacciones.\n2. Calificar el lead según el presupuesto estimado (Alto, Medio, Bajo).\n3. Generar una cotización preliminar o agendar una reunión con el departamento de ventas.\n\n[RESTRICCIONES EXPLÍCITAS DE ACCIÓN]\n- No puedes inventar precios ni fechas de entrega que no estén en tu contexto o herramientas.\n- Si el cliente pregunta por stock o seguimiento de pedidos, DEBES activar la herramienta de consulta (no improvisar).\n- Si el cliente se desvía del tema comercial, redirige amablemente.\n- Prohibido usar lenguaje inclusivo (ejemplos prohibidos: \"todes\", \"les clientes\", \"nosotres\"). Usa siempre el masculino genérico o formas neutras estándar como \"el cliente\", \"los usuarios\", \"el equipo\".\n- Máximo de 5 iteraciones para cerrar la consulta.",
+          "maxIterations": 5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "af8b75a3-4560-4b89-bceb-a0afbd0ad8dc",
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        128,
+        208
+      ],
+      "id": "c37e676e-fa68-4080-85d3-0c78c418d51c",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HyZaDVrXxjhs5XDE",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $workflow }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        224,
+        208
+      ],
+      "id": "c6cf57ea-b4f7-4fad-87bb-1b9c68c9666c",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "Herramienta de consulta al sistema interno de inventario y precios de Soluciones Globales Tech. Debe ser activada de manera autónoma por el agente cuando el usuario mencione palabras clave como: 'stock', 'disponibilidad', 'precio', 'cotización', 'número de pedido', 'entrega', 'demora', 'producto'. Esta herramienta está diseñada específicamente para mitigar la 'instrucción huérfana', es decir, cuando el usuario hace una pregunta que requiere datos estructurados no presentes en el prompt del sistema. El agente debe llamar a esta herramienta antes de dar una respuesta numérica o logística. Si el usuario pregunta por varios productos, el agente debe llamar a la herramienta por cada uno o pasar el nombre exacto en el parámetro 'query'.",
+        "jsCode": "// Simula una consulta a un sistema ERP\nconst consulta = $input.item.json.query || \"general\";\n\nconst inventario = {\n  \"producto A\": { stock: 50, precio: 150.00 },\n  \"producto B\": { stock: 12, precio: 320.50 },\n  \"producto C\": { stock: 0, precio: 75.00 }\n};\n\n// Busca si el query coincide con algún producto\nlet resultado = inventario[consulta.toLowerCase()];\nif (!resultado) {\n  resultado = { mensaje: \"Producto no encontrado en el sistema interno.\" };\n}\n\nreturn [{ json: resultado }];"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        368,
+        240
+      ],
+      "id": "3467b100-d1f5-4161-9727-d675e37d094c",
+      "name": "Code Tool"
+    },
+    {
+      "parameters": {
+        "chatId": "8691313419",
+        "text": "=// Reporte de observabilidad humana\nconst resultado = $input.item.json;\nconsole.log(\"=== REPORTE DE EJECUCIÓN ===\");\nconsole.log(JSON.stringify(resultado, null, 2));\nreturn [{ json: { mensaje: \"Reporte generado en consola/log\", detalle: resultado } }];",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "ccfdbc6f-d48a-4927-aa1f-926aa0433af9",
+      "name": "Send a text message",
+      "webhookId": "e2638af6-2940-464c-af16-7b48467082fc",
+      "credentials": {
+        "telegramApi": {
+          "id": "5rKezEnEOnftzquY",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9f880037-71c2-436e-98e3-54c52c2ecf24",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fc2eeb6f5e9d6b4b5b79c0207c6b026826b6b5918d03c9f08fb2e042e1412fcb"
+  },
+  "nodeGroups": [],
+  "id": "tmaqmpO20PvOT8IH",
+  "tags": []
+}
