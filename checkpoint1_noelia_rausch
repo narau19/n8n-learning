@@ -49,7 +49,7 @@
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "HyZaDVrXxjhs5XDE",
+          "id": "CREDENTIALS_PLACEHOLDER",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -99,7 +99,7 @@
       "webhookId": "e2638af6-2940-464c-af16-7b48467082fc",
       "credentials": {
         "telegramApi": {
-          "id": "5rKezEnEOnftzquY",
+          "id": "CREDENTIALS_PLACEHOLDER",
           "name": "Telegram account"
         }
       }
