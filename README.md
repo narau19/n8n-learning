@@ -89,7 +89,8 @@ Esto permite mantener una interfaz predecible entre el Manager y los distintos e
 ------------------------------------------------------------------------------------------------------------------------
 
 **Estructura de los workflows**
-workflows/
+
+//workflows/
 ├── M1/
 │   └── checkpoint1_noelia_rausch.json
 │
@@ -117,7 +118,8 @@ Los archivos exportados contienen únicamente la definición necesaria de los wo
 
 
 **🗺️ Evolución del proyecto**
-Módulo |	Implementación | Estado
+
+// Módulo |	Implementación | Estado
 - M1 | Agente base + System Prompt + herramienta + observabilidad	| ✅ Completado
 - M2 | Manager + Workers como sub-workflows + enrutamiento | ✅ Completado
 - M3 | Memoria persistente por Session ID | ⏳ Próximo
