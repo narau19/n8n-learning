@@ -1,7 +1,8 @@
 # n8n-learning
 
 **Proyecto Integrador - Automatización con IA**
-📌 Descripción del proyecto
+
+//Descripción del proyecto
 
 Este repositorio contiene el desarrollo progresivo de mi proyecto integrador del curso de Automatización con IA.
 
