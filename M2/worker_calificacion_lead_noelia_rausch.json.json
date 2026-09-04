@@ -1,0 +1,261 @@
+{
+  "name": "M2 - Worker 2 - Calificacion de Lead",
+  "nodes": [
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -208,
+        192
+      ],
+      "id": "f23390e8-4482-4856-ba38-2f5c8327b846",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CREDENTIALS_PLACEHOLDER",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bc3d3580-38c3-4054-b175-53e1be94774b",
+              "name": "status",
+              "value": "success",
+              "type": "string"
+            },
+            {
+              "id": "d8a72f17-8aa6-4cad-a889-e00a50a7e572",
+              "name": "worker",
+              "value": "lead_qualification_worker",
+              "type": "string"
+            },
+            {
+              "id": "6b9bebcd-9a1b-4f6d-a8fe-c82e1e96551c",
+              "name": "route",
+              "value": "LEAD_QUALIFICATION",
+              "type": "string"
+            },
+            {
+              "id": "cdfd4b33-0fe1-46eb-adc2-3f6b26ee623e",
+              "name": "request",
+              "value": "={{ $('Entrada Worker Leads').item.json.request }}",
+              "type": "string"
+            },
+            {
+              "id": "b1dcb705-aa0e-48b5-be58-8156c7fe4540",
+              "name": "session_id",
+              "value": "={{ $('Entrada Worker Leads').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "64386fcc-c223-4d87-9506-52afe4d52556",
+              "name": "result",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        336,
+        -160
+      ],
+      "id": "0403ec6b-9aca-40dd-8d01-e35a5a3fc614",
+      "name": "Salida - Leads"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $workflow }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -16,
+        160
+      ],
+      "id": "e84a4586-c516-48db-8473-51028d027f46",
+      "name": "Simple Memory",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "request"
+            },
+            {
+              "name": "session_id"
+            },
+            {
+              "name": "route"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -224,
+        -48
+      ],
+      "id": "a7ffb1f8-a254-4f41-bd0f-de0d05659c9c",
+      "name": "Entrada Worker Leads",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.request }}",
+        "options": {
+          "systemMessage": "[ROL]\nEres el Worker Especialista en Calificación Comercial de Soluciones Globales Tech.\n\n[ÁMBITO]\nTu única responsabilidad es analizar oportunidades comerciales y determinar la prioridad preliminar del lead.\n\n[OBJETIVO]\nClasificar el lead en una de estas categorías:\n- ALTO\n- MEDIO\n- BAJO\n- INFORMACION_INSUFICIENTE\n\n[CRITERIOS]\n- ALTO: existe intención clara de compra, necesidad concreta y presupuesto o urgencia elevada.\n- MEDIO: existe interés comercial concreto pero faltan datos relevantes para confirmar prioridad alta.\n- BAJO: interés exploratorio, baja urgencia o baja intención de compra.\n- INFORMACION_INSUFICIENTE: no existen datos suficientes para realizar una clasificación responsable.\n\n[REGLAS]\n- No inventes presupuesto.\n- No inventes necesidades del cliente.\n- No consultes inventario.\n- No confirmes descuentos.\n- No realices acciones fuera de la calificación comercial.\n- Si faltan datos, utiliza INFORMACION_INSUFICIENTE.\n- Explica brevemente el motivo de la clasificación.\n- No utilices lenguaje inclusivo.\n\n[ESCALAMIENTO]\nSi existe una solicitud fuera de tu competencia, indica que el caso requiere intervención del Manager o revisión humana.",
+          "maxIterations": 5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -16,
+        -48
+      ],
+      "id": "74a1a45e-21f7-42bc-82af-c7828ebedc98",
+      "name": "AI Agent - Worker Leads",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2c1eb242-e0a5-429e-a491-51c55b8e2d75",
+              "name": "status",
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "id": "4fdfb719-9f1b-4f3e-b45d-40003b901971",
+              "name": "worker",
+              "value": "lead_qualification_worker",
+              "type": "string"
+            },
+            {
+              "id": "bccd4d9b-d38e-4dd9-9e43-1c305bc6a79b",
+              "name": "route",
+              "value": "LEAD_QUALIFICATION",
+              "type": "string"
+            },
+            {
+              "id": "810545d6-b980-4e91-a2d5-32728fb8c9aa",
+              "name": "result",
+              "value": "No fue posible completar la calificación. Se requiere revisión humana.",
+              "type": "string"
+            },
+            {
+              "id": "404010e7-404c-4a31-81a4-a8d0f88dbd07",
+              "name": "request",
+              "value": "={{ $('Entrada Worker Leads').item.json.request }}",
+              "type": "string"
+            },
+            {
+              "id": "4d1d3fb7-0b99-44d0-bec8-67df4e973c41",
+              "name": "session_id",
+              "value": "={{ $('Entrada Worker Leads').item.json.session_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        336,
+        48
+      ],
+      "id": "478d9715-d8de-48ce-8dda-ead775519481",
+      "name": "Error - Leads"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Worker Leads",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent - Worker Leads",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Entrada Worker Leads": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Worker Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Worker Leads": {
+      "main": [
+        [
+          {
+            "node": "Salida - Leads",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error - Leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "e3886a31-facd-46de-aaa3-64efbc2d3d5a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fc2eeb6f5e9d6b4b5b79c0207c6b026826b6b5918d03c9f08fb2e042e1412fcb"
+  },
+  "nodeGroups": [],
+  "id": "r8T9dhEFFIDY6kRt",
+  "tags": []
+}
