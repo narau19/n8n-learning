@@ -1,1 +1,704 @@
-
+{
+  "name": "M2 - Manager - Soluciones Globales Tech",
+  "nodes": [
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        144,
+        96
+      ],
+      "id": "ab64d1d6-2912-4546-9f5b-c26fe01ee16f",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CREDENTIALS_PLACEHOLDER",
+          "name": "CREDENTIALS_PLACEHOLDER"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "availableInChat": true,
+        "agentIcon": {
+          "type": "icon",
+          "value": "messages-square"
+        },
+        "agentName": "Asesor Comercial Global Tech",
+        "agentDescription": "Asistente virtual de calificación de leads y consultoría de inventario para Soluciones Globales Tech. Ayuda con stock, precios y cotizaciones.",
+        "suggestedPrompts": {
+          "prompts": [
+            {
+              "text": "[\"Consultar stock del Producto A\", \"Necesito una cotización para el Producto B\", \"Quiero calificar mi lead como Alto\"]"
+            }
+          ]
+        },
+        "options": {
+          "responseMode": "streaming"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        80,
+        -144
+      ],
+      "id": "dc6058d1-7445-432c-a927-8301c0d7c741",
+      "name": "When chat message received",
+      "webhookId": "5f51121f-4f5b-4742-8f03-adf3bc845e8d",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $workflow }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        320,
+        112
+      ],
+      "id": "e9450636-eb34-42fc-95fb-903e3d41f5eb",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=={{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "[ROL]\nEres el Manager de Orquestación Comercial de Soluciones Globales Tech.\n\n[RESPONSABILIDAD]\nTu única responsabilidad es analizar la intención del mensaje recibido y decidir qué Worker especializado debe procesarlo.\n\n[TAXONOMÍA CERRADA]\nSolo puedes seleccionar UNA de estas tres categorías:\n\nINVENTORY\nLEAD_QUALIFICATION\nFALLBACK\n\n[CRITERIOS DE ENRUTAMIENTO]\n\nSelecciona INVENTORY cuando el usuario pregunte por:\n- stock\n- disponibilidad\n- productos\n- precios\n- cotizaciones\n- existencias\n- información comercial de un producto\n\nSelecciona LEAD_QUALIFICATION cuando el usuario:\n- manifieste intención de compra\n- describa presupuesto\n- indique urgencia comercial\n- solicite evaluación como prospecto\n- quiera saber si su oportunidad es prioritaria\n- proporcione datos para calificar una oportunidad comercial\n\nSelecciona FALLBACK cuando:\n- la intención no corresponda claramente a ninguna de las categorías anteriores\n- la petición sea ambigua\n- solicite una acción fuera del alcance comercial\n- no exista suficiente información para seleccionar un Worker con seguridad\n\n[RESTRICCIONES]\n- No resuelvas la consulta.\n- No consultes inventario.\n- No califiques leads.\n- No redactes explicaciones.\n- No inventes categorías.\n- No selecciones más de una categoría.\n- No agregues puntuación.\n- No agregues Markdown.\n- No agregues frases adicionales.\n\n[FORMATO DE RESPUESTA]\nDevuelve exclusivamente una de estas tres cadenas exactas:\n\nINVENTORY\nLEAD_QUALIFICATION\nFALLBACK",
+          "maxIterations": 5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        304,
+        -144
+      ],
+      "id": "89e47999-4476-4f58-99f8-e9e4c02f9897",
+      "name": "AI Agent - Manager Router",
+      "retryOnFail": true,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "INVENTORY",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "c333d371-3607-4e82-b0ba-28f9e6250ee9"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "INVENTORY"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "7826dbe8-1ba5-40a1-948f-d8ac2698d468",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "LEAD_QUALIFICATION",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "LEAD_QUALIFICATION"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "OTHER"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        -160
+      ],
+      "id": "32d39567-3582-4cc5-8d19-f0d4d9fbb498",
+      "name": "Router - Taxonomia Cerrada"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "af7c75e2-8892-4e40-b82d-3864d0b5a976",
+              "name": "request",
+              "value": "={{ $('When chat message received').item.json.chatInput }}",
+              "type": "string"
+            },
+            {
+              "id": "6b62b60e-8227-4274-a821-f322f136da60",
+              "name": "sessionId",
+              "value": "={{ $('When chat message received').item.json.sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "836e1a97-6f37-4c85-bc83-da97396ecafa",
+              "name": "route",
+              "value": "INVENTORY",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        -336
+      ],
+      "id": "1560bf18-429e-4a3d-9d66-c070dfd69cf4",
+      "name": "Entrada - Inventory Worker"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "NybLWhAQ5GHm8yWU",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/NybLWhAQ5GHm8yWU",
+          "cachedResultName": "M2 - Worker 1 - Inventario"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "request": "={{ $json.request }}",
+            "session_id": "={{ $json.sessionId }}",
+            "route": "={{ $json.route }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "request",
+              "displayName": "request",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "route",
+              "displayName": "route",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1104,
+        -336
+      ],
+      "id": "35ee996d-b464-4d66-bf57-769141ed256d",
+      "name": "Delegar a Worker Inventario",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "76c05c47-1ae9-4077-a3e1-5b2efc568bbb",
+              "name": "request",
+              "value": "={{ $('When chat message received').item.json.chatInput }}",
+              "type": "string"
+            },
+            {
+              "id": "08a48c77-9bc2-4459-bfab-14bac521cd10",
+              "name": "sessionId",
+              "value": "={{ $('When chat message received').item.json.sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "9e3bb7a2-cff7-4354-a7b1-83c05899e4e3",
+              "name": "route",
+              "value": "LEAD_QUALIFICATION",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        -144
+      ],
+      "id": "56046a41-d7df-4cd3-8a6c-76338433cdfc",
+      "name": "Edit Fields",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "r8T9dhEFFIDY6kRt",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/r8T9dhEFFIDY6kRt",
+          "cachedResultName": "M2 - Worker 2 - Calificacion de Lead"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "request": "={{ $json.request }}",
+            "session_id": "={{ $json.sessionId }}",
+            "route": "={{ $json.route }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "request",
+              "displayName": "request",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "route",
+              "displayName": "route",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        1104,
+        -144
+      ],
+      "id": "45e5bfb6-a5e8-49d8-84a6-cc7c26493c84",
+      "name": "Call 'M2 - Worker 2 - Calificacion de Lead'"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "98586066-f63f-4ac9-8de5-56f12d817a3f",
+              "name": "status",
+              "value": "needs_human",
+              "type": "string"
+            },
+            {
+              "id": "910dd391-7071-4c22-941a-f167cb012e4d",
+              "name": "worker",
+              "value": "human_supervisor",
+              "type": "string"
+            },
+            {
+              "id": "a80b57bd-cae6-4497-b6ca-19d702264d72",
+              "name": "route",
+              "value": "FALLBACK",
+              "type": "string"
+            },
+            {
+              "id": "3e6c0d67-9ec0-43f1-a8c9-3fec5a802d65",
+              "name": "request",
+              "value": "={{ $('When chat message received').item.json.chatInput }}",
+              "type": "string"
+            },
+            {
+              "id": "32d47b24-9559-42b8-9c37-abd869a3bff5",
+              "name": "sessionId",
+              "value": "={{ $('When chat message received').item.json.sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "0b22722e-fd49-462e-8c8f-0dd3e7dbffce",
+              "name": "result",
+              "value": "No fue posible identificar con suficiente seguridad el especialista requerido. La solicitud fue derivada a revisión humana.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        992,
+        128
+      ],
+      "id": "a8f77553-dab0-4d8d-b274-7b4d3a26ddd9",
+      "name": "Fallback - Revision Humana",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1yWObw8pRVe9Kwyc3e4lCPk2jz5VxPePZ83QXNfNOmAs",
+          "mode": "list",
+          "cachedResultName": "M2_Auditoria_Agentes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yWObw8pRVe9Kwyc3e4lCPk2jz5VxPePZ83QXNfNOmAs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yWObw8pRVe9Kwyc3e4lCPk2jz5VxPePZ83QXNfNOmAs/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $now }}",
+            "session_id": "={{ $json.session_id }}",
+            "route": "={{ $json.route }}",
+            "worker": "={{ $json.worker }}",
+            "status": "={{ $json.status }}",
+            "result": "={{ $json.result }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "route",
+              "displayName": "route",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "worker",
+              "displayName": "worker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "result",
+              "displayName": "result",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1408,
+        -144
+      ],
+      "id": "ddb73ab3-62b5-49eb-96af-b5eb946c3914",
+      "name": "Log de Trazabilidad",
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "CREDENTIALS_PLACEHOLDER",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f9ac9869-ad8d-4e17-bdb3-ba5de2b465c6",
+              "name": "output",
+              "value": "={{ $json.result }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1600,
+        -144
+      ],
+      "id": "44c3be11-2922-439b-b178-8b5366cb6b4c",
+      "name": "Respuesta al Usuario",
+      "retryOnFail": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Manager Router",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Manager Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent - Manager Router",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Manager Router": {
+      "main": [
+        [
+          {
+            "node": "Router - Taxonomia Cerrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Router - Taxonomia Cerrada": {
+      "main": [
+        [
+          {
+            "node": "Entrada - Inventory Worker",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fallback - Revision Humana",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Entrada - Inventory Worker": {
+      "main": [
+        [
+          {
+            "node": "Delegar a Worker Inventario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Call 'M2 - Worker 2 - Calificacion de Lead'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delegar a Worker Inventario": {
+      "main": [
+        [
+          {
+            "node": "Log de Trazabilidad",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'M2 - Worker 2 - Calificacion de Lead'": {
+      "main": [
+        [
+          {
+            "node": "Log de Trazabilidad",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fallback - Revision Humana": {
+      "main": [
+        [
+          {
+            "node": "Log de Trazabilidad",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log de Trazabilidad": {
+      "main": [
+        [
+          {
+            "node": "Respuesta al Usuario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "8df2bb16-15a5-4fbe-899b-103b8dcef5fe",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fc2eeb6f5e9d6b4b5b79c0207c6b026826b6b5918d03c9f08fb2e042e1412fcb"
+  },
+  "nodeGroups": [],
+  "id": "DbIiy3txvqa0Ojie",
+  "tags": [
+    {
+      "updatedAt": "2026-09-01T04:55:13.221Z",
+      "createdAt": "2026-09-01T04:55:13.221Z",
+      "id": "msovVuuDULpos99R",
+      "name": "Manager"
+    }
+  ]
+}
