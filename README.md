@@ -91,13 +91,12 @@ Esto permite mantener una interfaz predecible entre el Manager y los distintos e
 **Estructura de los workflows**
 
 //workflows/
-├── M1/
-│   └── checkpoint1_noelia_rausch.json
-│
-└── M2/
-    ├── manager_noelia_rausch.json
-    ├── worker_inventario_noelia_rausch.json
-    └── worker_calificacion_lead_noelia_rausch.json
+- M1/
+-- checkpoint1_noelia_rausch.json
+- M2/
+-- manager_noelia_rausch.json
+-- worker_inventario_noelia_rausch.json
+-- worker_calificacion_lead_noelia_rausch.json
 
 Los Workers de M2 funcionan como sub-workflows independientes y son llamados por el Manager solamente cuando la intención detectada corresponde con su especialidad.
 
