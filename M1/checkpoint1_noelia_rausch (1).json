@@ -1,0 +1,197 @@
+{
+  "name": "checkpoint1_noelia_rausch",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=[ROL CORPORATIVO]\nEres el Asesor Comercial Senior de la empresa \"Soluciones Globales Tech\". Tu personalidad es formal, resolutiva y orientada a resultados.\n\n[OBJETIVOS COMERCIALES DE LA SESIÓN]\n1. Identificar la necesidad principal del cliente en menos de 3 interacciones.\n2. Calificar el lead según el presupuesto estimado (Alto, Medio, Bajo).\n3. Generar una cotización preliminar o agendar una reunión con el departamento de ventas.\n\n[RESTRICCIONES EXPLÍCITAS DE ACCIÓN]\n- No puedes inventar precios ni fechas de entrega que no estén en tu contexto o herramientas.\n- Si el cliente pregunta por stock o seguimiento de pedidos, DEBES activar la herramienta de consulta (no improvisar).\n- Si el cliente se desvía del tema comercial, redirige amablemente.\n- Prohibido usar lenguaje inclusivo (ejemplos prohibidos: \"todes\", \"les clientes\", \"nosotres\"). Usa siempre el masculino genérico o formas neutras estándar como \"el cliente\", \"los usuarios\", \"el equipo\".\n- Máximo de 5 iteraciones para cerrar la consulta.",
+        "options": {
+          "systemMessage": "[ROL CORPORATIVO]\nEres el Asesor Comercial Senior de la empresa \"Soluciones Globales Tech\". Tu personalidad es formal, resolutiva y orientada a resultados.\n\n[OBJETIVOS COMERCIALES DE LA SESIÓN]\n1. Identificar la necesidad principal del cliente en menos de 3 interacciones.\n2. Calificar el lead según el presupuesto estimado (Alto, Medio, Bajo).\n3. Generar una cotización preliminar o agendar una reunión con el departamento de ventas.\n\n[RESTRICCIONES EXPLÍCITAS DE ACCIÓN]\n- No puedes inventar precios ni fechas de entrega que no estén en tu contexto o herramientas.\n- Si el cliente pregunta por stock o seguimiento de pedidos, DEBES activar la herramienta de consulta (no improvisar).\n- Si el cliente se desvía del tema comercial, redirige amablemente.\n- Prohibido usar lenguaje inclusivo (ejemplos prohibidos: \"todes\", \"les clientes\", \"nosotres\"). Usa siempre el masculino genérico o formas neutras estándar como \"el cliente\", \"los usuarios\", \"el equipo\".\n- Máximo de 5 iteraciones para cerrar la consulta.",
+          "maxIterations": 5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        288,
+        0
+      ],
+      "id": "af8b75a3-4560-4b89-bceb-a0afbd0ad8dc",
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        224
+      ],
+      "id": "c37e676e-fa68-4080-85d3-0c78c418d51c",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CREDENTIALS_PLACEHOLDER",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $workflow }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        352,
+        224
+      ],
+      "id": "c6cf57ea-b4f7-4fad-87bb-1b9c68c9666c",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "Herramienta de consulta al sistema interno de inventario y precios de Soluciones Globales Tech. Debe ser activada de manera autónoma por el agente cuando el usuario mencione palabras clave como: 'stock', 'disponibilidad', 'precio', 'cotización', 'número de pedido', 'entrega', 'demora', 'producto'. Esta herramienta está diseñada específicamente para mitigar la 'instrucción huérfana', es decir, cuando el usuario hace una pregunta que requiere datos estructurados no presentes en el prompt del sistema. El agente debe llamar a esta herramienta antes de dar una respuesta numérica o logística. Si el usuario pregunta por varios productos, el agente debe llamar a la herramienta por cada uno o pasar el nombre exacto en el parámetro 'query'.",
+        "jsCode": "// Simula una consulta a un sistema ERP\nconst consulta = $input.item.json.query || \"general\";\n\nconst inventario = {\n  \"producto A\": { stock: 50, precio: 150.00 },\n  \"producto B\": { stock: 12, precio: 320.50 },\n  \"producto C\": { stock: 0, precio: 75.00 }\n};\n\n// Busca si el query coincide con algún producto\nlet resultado = inventario[consulta.toLowerCase()];\nif (!resultado) {\n  resultado = { mensaje: \"Producto no encontrado en el sistema interno.\" };\n}\n\nreturn [{ json: resultado }];"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        480,
+        224
+      ],
+      "id": "3467b100-d1f5-4161-9727-d675e37d094c",
+      "name": "Code Tool"
+    },
+    {
+      "parameters": {
+        "availableInChat": true,
+        "agentIcon": {
+          "type": "icon",
+          "value": "messages-square"
+        },
+        "agentName": "Asesor Comercial Global Tech",
+        "agentDescription": "Asistente virtual de calificación de leads y consultoría de inventario para Soluciones Globales Tech. Ayuda con stock, precios y cotizaciones.",
+        "suggestedPrompts": {
+          "prompts": [
+            {
+              "text": "[\"Consultar stock del Producto A\", \"Necesito una cotización para el Producto B\", \"Quiero calificar mi lead como Alto\"]"
+            }
+          ]
+        },
+        "options": {
+          "responseMode": "streaming"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "84cd4338-c1d4-4530-a530-ac10dc816fd0",
+      "name": "When chat message received",
+      "webhookId": "8ccaa58c-317b-4653-af65-52dffae703a5",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "jsCode": "// Paso 1: Capturar la salida completa del Agente para el Execution Log (Observabilidad)\nconst fullOutput = $input.item.json;\nconsole.log(\"=== REPORTE DE OBSERVABILIDAD HUMANA (EXECUTION LOG) ===\");\nconsole.log(\"Iteraciones usadas:\", fullOutput.intermediateSteps?.length || 0);\nconsole.log(\"Herramientas llamadas:\", fullOutput.toolCalls || \"Ninguna\");\nconsole.log(\"Respuesta cruda:\", fullOutput.output);\n\n// Paso 2: Extraer SOLO la respuesta textual para enviarla al chat\nconst agentReply = fullOutput.output || \"Lo siento, no pude procesar tu solicitud.\";\n\n// Paso 3: Devolver el texto limpio. El Chat Trigger enviará esto al usuario.\nreturn [{ json: { response: agentReply } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        0
+      ],
+      "id": "770fd69f-a5b8-427e-b98c-0c7d9126137f",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "6d2339df-7835-4f11-bc2d-ec04efa17e2c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fc2eeb6f5e9d6b4b5b79c0207c6b026826b6b5918d03c9f08fb2e042e1412fcb"
+  },
+  "nodeGroups": [],
+  "id": "tmaqmpO20PvOT8IH",
+  "tags": []
+}
