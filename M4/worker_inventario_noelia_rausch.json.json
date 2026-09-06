@@ -1,0 +1,263 @@
+{
+  "name": "M2 - Worker 1 - Inventario",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.request }}",
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "[ROL]\nEres el Worker Especialista de Inventario de Soluciones Globales Tech.\n\n[ÁMBITO]\nTu única responsabilidad es responder consultas relacionadas con productos, disponibilidad, stock, precios y cotizaciones preliminares.\n\n[DATOS INTERNOS DISPONIBLES]\nProducto A:\n- Stock: 50 unidades\n- Precio unitario: 150\n\nProducto B:\n- Stock: 12 unidades\n- Precio unitario: 320.50\n\nProducto C:\n- Stock: 0 unidades\n- Precio unitario: 75\n\n[OBJETIVO]\nAnalizar la petición recibida desde el Workflow Manager e informar únicamente los datos de inventario relevantes.\n\n[REGLAS]\n- No realices calificación de leads.\n- No cambies precios.\n- No inventes productos.\n- No inventes disponibilidad.\n- Si el producto solicitado no existe en los datos internos, informa que no fue encontrado.\n- No realices tareas ajenas al inventario.\n- Responde de forma breve, profesional y clara.\n- No utilices lenguaje inclusivo.\n\n[ESCALAMIENTO]\nSi la consulta no puede resolverse con los datos disponibles, indica que se requiere revisión humana.",
+          "maxIterations": 5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -96,
+        -80
+      ],
+      "id": "91e33695-d94b-413a-acf0-4dbbc7a8fbac",
+      "name": "AI Agent - Especialista Inventario",
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -144,
+        128
+      ],
+      "id": "b97cf689-e2b6-4f33-b578-c5e35e1f325d",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CREDENTIALS_PLACEHOLDER",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6bf915cc-e952-43c8-9c44-57a91961e2b7",
+              "name": "status",
+              "value": "status",
+              "type": "string"
+            },
+            {
+              "id": "03aea9e2-219f-439f-a10c-95f1c6fca687",
+              "name": "worker",
+              "value": "inventory_worker",
+              "type": "string"
+            },
+            {
+              "id": "9c8f9de0-573e-4214-8732-09f1b781f057",
+              "name": "route",
+              "value": "INVENTORY",
+              "type": "string"
+            },
+            {
+              "id": "51d13f17-1f3a-4d02-9f0f-60dbd0429cb4",
+              "name": "request",
+              "value": "={{ $('Entrada Worker Inventario').item.json.request }}",
+              "type": "string"
+            },
+            {
+              "id": "01b0b3a9-e961-44d9-ac86-d637946c1a58",
+              "name": "session_id",
+              "value": "={{ $('Entrada Worker Inventario').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "9ca20cd7-dc41-4ab2-a1c9-a4d8f5e182c7",
+              "name": "result",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        -176
+      ],
+      "id": "9f2d3ed8-a7cc-44b2-9623-9d17ae762dca",
+      "name": "Salida - Inventario",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6e784cb6-62cb-421e-befb-3a87879a08db",
+              "name": "status",
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "id": "63a9f83e-610f-4d96-a971-e827c67098b3",
+              "name": "worker",
+              "value": "inventory_worker",
+              "type": "string"
+            },
+            {
+              "id": "18d6585f-5aaa-4371-b06e-579e2a8dd18c",
+              "name": "route",
+              "value": "INVENTORY",
+              "type": "string"
+            },
+            {
+              "id": "fbaeccdf-7408-4a03-b8a8-cba7f22b4411",
+              "name": "result",
+              "value": "No fue posible ejecutar el Worker de inventario. Se requiere revisión humana.",
+              "type": "string"
+            },
+            {
+              "id": "b0a3fbe5-efb4-49e3-a541-0dd39959567e",
+              "name": "session_id",
+              "value": "={{ $('Entrada Worker Inventario').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "a988da50-9f39-48f4-b444-d55e254c9e30",
+              "name": "request",
+              "value": "={{ $('Entrada Worker Inventario').item.json.request }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        16
+      ],
+      "id": "fce03525-969f-4bbf-8003-87a8ac0cce89",
+      "name": "Error - Inventario"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $workflow }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        144
+      ],
+      "id": "bf9ed223-0187-41c0-883f-6bc648d6ecb9",
+      "name": "Simple Memory",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "request"
+            },
+            {
+              "name": "session_id"
+            },
+            {
+              "name": "route"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -320,
+        -80
+      ],
+      "id": "cff9d201-a579-474c-bd51-b366a93e19df",
+      "name": "Entrada Worker Inventario",
+      "retryOnFail": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Especialista Inventario",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Especialista Inventario": {
+      "main": [
+        [
+          {
+            "node": "Salida - Inventario",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error - Inventario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent - Especialista Inventario",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Entrada Worker Inventario": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Especialista Inventario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9d125a86-a17c-4e3a-89fd-784d553ae3a5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fc2eeb6f5e9d6b4b5b79c0207c6b026826b6b5918d03c9f08fb2e042e1412fcb"
+  },
+  "nodeGroups": [],
+  "id": "NybLWhAQ5GHm8yWU",
+  "tags": []
+}
