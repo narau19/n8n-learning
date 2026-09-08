@@ -381,6 +381,46 @@ La base de conocimiento utiliza un esquema de gobernanza basado en:
 Solo una versión vigente de cada documento debe permanecer activa en la base utilizada por el agente.
 La incorporación de RAG no reemplaza las capacidades anteriores, sino que agrega una nueva fuente especializada de conocimiento organizacional.
 
+**M6 — Ecosistemas Multimedia de Audio**
+El sexto checkpoint amplía la arquitectura del proyecto incorporando un canal conversacional de voz sin reemplazar los componentes desarrollados en módulos anteriores.
+
+**Arquitectura de voz**
+El canal de audio utiliza un Webhook como punto de entrada para simular un canal de mensajería en el entorno local.
+Flujo conceptual:
+Webhook de audio → STT → Validación → Normalización → Manager → Workers especializados → RAG → Control de longitud → TTS → Audio binario → Respuesta Webhook
+
+La transcripción obtenida se normaliza al mismo contrato de entrada utilizado por el resto de la arquitectura, permitiendo reutilizar la memoria persistente, el Manager, los Workers especializados y el sistema RAG implementado en M5.
+
+**Contingencia de audio**
+Inmediatamente después del proceso STT se incorpora una condición de validación. Las transcripciones vacías o insuficientes se desvían a una ruta segura que solicita al usuario volver a grabar el mensaje.
+
+**Optimización de voz**
+Las respuestas destinadas al canal de voz tienen un máximo de 200 caracteres.
+La restricción se implementa mediante dos niveles:
+- regla explícita en el System Prompt;
+- control determinístico antes de TTS.
+
+Esto permite reducir el costo de síntesis, la latencia y la fatiga cognitiva asociada a respuestas de audio extensas.
+
+**Privacidad y compliance**
+Los archivos de audio se utilizan únicamente durante la ejecución necesaria para la transcripción o síntesis.
+El proyecto no persiste intencionalmente audio de clientes en:
+- Airtable;
+- CRM;
+- memoria conversacional;
+- Supabase;
+- base RAG.
+
+Después de la transcripción, la arquitectura opera sobre una representación textual normalizada.
+
+**Simulación del canal**
+Debido a que el proyecto se ejecuta en un entorno local y académico, el canal de mensajería de voz se simula mediante Webhook y cliente HTTP.
+La respuesta sintetizada se recupera como archivo MP3 binario y se devuelve mediante el mismo circuito HTTP, demostrando conceptualmente un flujo cerrado STT → IA → TTS.
+
+**Evaluación de viabilidad**
+La incorporación de voz se considera favorable para consultas breves y repetitivas relacionadas con envíos, garantías, medios de pago y políticas institucionales.
+Para consultas extensas, sensibles, legales o ambiguas se mantiene la derivación a revisión humana.
+
 ------------------------------------------------------------------------------------------------------------------------
 
 **Estructura de los workflows**
@@ -404,6 +444,8 @@ La incorporación de RAG no reemplaza las capacidades anteriores, sino que agreg
 -- checkpoint5_noelia_rausch.json
 -- ingesta_documental_noelia_rausch.json
 -- worker_conocimiento_documental_noelia_rausch.json
+- M6/
+-- checkpoint6_noelia_rausch.json
 
 La documentación correspondiente a cada checkpoint se conserva separada para poder revisar la evolución del proyecto.
 
@@ -431,7 +473,7 @@ Los archivos exportados contienen únicamente la definición necesaria de los wo
 - M3 | Memoria persistente + Session ID + Summarization | ✅ Completado
 - M4 | Correo + CRM + borradores HITL + canal interno + controles preventivos | ✅ Completado
 - M5 | Parsing + Chunking + Vector Store + RAG + Gobernanza | ✅ Completado
-- M6 | Entrada y salida por voz | ⏳ Próximo
+- M6 | entrada STT, interfaz conversacional de voz, TTS, contingencia y privacidad binaria. | ✅ Completado
 - M7-M11 | Evolución progresiva hasta el Proyecto Final Integrador | ⏳ Pendiente
 
 La intención es continuar utilizando esta misma arquitectura y sumar en cada módulo solamente los componentes necesarios para la nueva funcionalidad.
