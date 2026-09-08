@@ -996,17 +996,17 @@
         "operation": "search",
         "base": {
           "__rl": true,
-          "value": "appCohrxZA1XhXHzA",
+          "value": "CREDENTIALS_PLACEHOLDER",
           "mode": "list",
           "cachedResultName": "Memoria Agente - Soluciones Globales Tech",
-          "cachedResultUrl": "https://airtable.com/appCohrxZA1XhXHzA"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "table": {
           "__rl": true,
-          "value": "tblZDHwmZTyHJuEFB",
+          "value": "CREDENTIALS_PLACEHOLDER",
           "mode": "list",
           "cachedResultName": "Memoria_Sesiones",
-          "cachedResultUrl": "https://airtable.com/appCohrxZA1XhXHzA/tblZDHwmZTyHJuEFB"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "filterByFormula": "={Session_ID} ='{{ $(\"Set - Limpiar Email\").item.json.session_id }}'",
         "returnAll": false,
@@ -1034,17 +1034,17 @@
         "operation": "create",
         "base": {
           "__rl": true,
-          "value": "appCohrxZA1XhXHzA",
+          "value": "CREDENTIALS_PLACEHOLDER",
           "mode": "list",
           "cachedResultName": "Memoria Agente - Soluciones Globales Tech",
-          "cachedResultUrl": "https://airtable.com/appCohrxZA1XhXHzA"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "table": {
           "__rl": true,
-          "value": "tblZDHwmZTyHJuEFB",
+          "value": "CREDENTIALS_PLACEHOLDER",
           "mode": "list",
           "cachedResultName": "Memoria_Sesiones",
-          "cachedResultUrl": "https://airtable.com/appCohrxZA1XhXHzA/tblZDHwmZTyHJuEFB"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -1374,17 +1374,17 @@
         "operation": "update",
         "base": {
           "__rl": true,
-          "value": "appCohrxZA1XhXHzA",
+          "value": "CREDENTIALS_PLACEHOLDER",
           "mode": "list",
           "cachedResultName": "Memoria Agente - Soluciones Globales Tech",
-          "cachedResultUrl": "https://airtable.com/appCohrxZA1XhXHzA"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "table": {
           "__rl": true,
-          "value": "tblZDHwmZTyHJuEFB",
+          "value": "CREDENTIALS_PLACEHOLDER",
           "mode": "list",
           "cachedResultName": "Memoria_Sesiones",
-          "cachedResultUrl": "https://airtable.com/appCohrxZA1XhXHzA/tblZDHwmZTyHJuEFB"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -1536,17 +1536,17 @@
         "operation": "update",
         "base": {
           "__rl": true,
-          "value": "appCohrxZA1XhXHzA",
+          "value": "CREDENTIALS_PLACEHOLDER",
           "mode": "list",
           "cachedResultName": "Memoria Agente - Soluciones Globales Tech",
-          "cachedResultUrl": "https://airtable.com/appCohrxZA1XhXHzA"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "table": {
           "__rl": true,
-          "value": "tblZDHwmZTyHJuEFB",
+          "value": "CREDENTIALS_PLACEHOLDER",
           "mode": "list",
           "cachedResultName": "Memoria_Sesiones",
-          "cachedResultUrl": "https://airtable.com/appCohrxZA1XhXHzA/tblZDHwmZTyHJuEFB"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -1695,17 +1695,17 @@
         "operation": "search",
         "base": {
           "__rl": true,
-          "value": "appCohrxZA1XhXHzA",
+          "value": "CREDENTIALS_PLACEHOLDER",
           "mode": "list",
           "cachedResultName": "Memoria Agente - Soluciones Globales Tech",
-          "cachedResultUrl": "https://airtable.com/appCohrxZA1XhXHzA"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "table": {
           "__rl": true,
-          "value": "tblspiniGKkUF4eyl",
+          "value": "CREDENTIALS_PLACEHOLDER",
           "mode": "list",
           "cachedResultName": "Contactos_CRM",
-          "cachedResultUrl": "https://airtable.com/appCohrxZA1XhXHzA/tblspiniGKkUF4eyl"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "filterByFormula": "={Email}='{{ $json.from_email }}'",
         "returnAll": false,
@@ -1767,17 +1767,17 @@
         "operation": "update",
         "base": {
           "__rl": true,
-          "value": "appCohrxZA1XhXHzA",
+          "value": "CREDENTIALS_PLACEHOLDER",
           "mode": "list",
           "cachedResultName": "Memoria Agente - Soluciones Globales Tech",
-          "cachedResultUrl": "https://airtable.com/appCohrxZA1XhXHzA"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "table": {
           "__rl": true,
-          "value": "tblspiniGKkUF4eyl",
+          "value": "CREDENTIALS_PLACEHOLDER",
           "mode": "list",
           "cachedResultName": "Contactos_CRM",
-          "cachedResultUrl": "https://airtable.com/appCohrxZA1XhXHzA/tblspiniGKkUF4eyl"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -1980,17 +1980,17 @@
         "operation": "create",
         "base": {
           "__rl": true,
-          "value": "appCohrxZA1XhXHzA",
+          "value": "CREDENTIALS_PLACEHOLDER",
           "mode": "list",
           "cachedResultName": "Memoria Agente - Soluciones Globales Tech",
-          "cachedResultUrl": "https://airtable.com/appCohrxZA1XhXHzA"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "table": {
           "__rl": true,
-          "value": "tblspiniGKkUF4eyl",
+          "value": "CREDENTIALS_PLACEHOLDER",
           "mode": "list",
           "cachedResultName": "Contactos_CRM",
-          "cachedResultUrl": "https://airtable.com/appCohrxZA1XhXHzA/tblspiniGKkUF4eyl"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "columns": {
           "mappingMode": "defineBelow",
