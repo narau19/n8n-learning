@@ -51,7 +51,7 @@
       ],
       "id": "dc6058d1-7445-432c-a927-8301c0d7c741",
       "name": "When chat message received",
-      "webhookId": "5f51121f-4f5b-4742-8f03-adf3bc845e8d",
+      "webhookId": "CREDENTIALS_PLACEHOLDER",
       "retryOnFail": true,
       "maxTries": 5,
       "alwaysOutputData": false
@@ -420,14 +420,14 @@
           "value": "1yWObw8pRVe9Kwyc3e4lCPk2jz5VxPePZ83QXNfNOmAs",
           "mode": "list",
           "cachedResultName": "M2_Auditoria_Agentes",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yWObw8pRVe9Kwyc3e4lCPk2jz5VxPePZ83QXNfNOmAs/edit?usp=drivesdk"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Hoja 1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yWObw8pRVe9Kwyc3e4lCPk2jz5VxPePZ83QXNfNOmAs/edit#gid=0"
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
         },
         "columns": {
           "mappingMode": "defineBelow",
