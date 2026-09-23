@@ -1,0 +1,22 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Credentials and secrets
+credentials/
+secrets/
+*.key
+*.pem
+
+# Local files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+
+# Private exports
+private/
+production/
