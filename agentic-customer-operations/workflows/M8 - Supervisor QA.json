@@ -1,0 +1,3226 @@
+{
+  "name": "M8 - Supervisor QA",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "trace_id"
+            },
+            {
+              "name": "session_id"
+            },
+            {
+              "name": "query_original"
+            },
+            {
+              "name": "respuesta_propuesta"
+            },
+            {
+              "name": "route"
+            },
+            {
+              "name": "worker"
+            },
+            {
+              "name": "channel"
+            },
+            {
+              "name": "user_name"
+            },
+            {
+              "name": "from_email"
+            },
+            {
+              "name": "subject"
+            },
+            {
+              "name": "message_id"
+            },
+            {
+              "name": "thread_id"
+            },
+            {
+              "name": "costo_unitario_llm",
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        -112
+      ],
+      "id": "e324259f-8f2a-4da6-bc39-5c3fb8dc5da4",
+      "name": "Entrada Supervisor QA M8"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "Memoria Agente - Soluciones Globales Tech",
+          "cachedResultUrl": "https://airtable.com/AIRTABLE_BASE_ID"
+        },
+        "table": {
+          "__rl": true,
+          "value": "AIRTABLE_TABLE_ID",
+          "mode": "list",
+          "cachedResultName": "Contexto_QA_M8",
+          "cachedResultUrl": "https://airtable.com/AIRTABLE_BASE_ID/AIRTABLE_TABLE_ID"
+        },
+        "filterByFormula": "={Ruta}='{{$json.route}}'",
+        "returnAll": false,
+        "limit": 1,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        160,
+        -112
+      ],
+      "id": "51016334-9a2c-4926-94d3-e4cdbb44bb48",
+      "name": "Airtable - Buscar Contexto QA",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "CREDENTIALS_PLACEHOLDER",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "88e70916-291c-4e74-b3ec-c9dc65e36ff4",
+              "name": "trace_id",
+              "value": "={{ $('Entrada Supervisor QA M8').item.json.trace_id }}",
+              "type": "string"
+            },
+            {
+              "id": "43f3c75b-ae18-4b49-aa22-ae55ca9c7c4e",
+              "name": "session_id",
+              "value": "={{ $('Entrada Supervisor QA M8').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "d6511cb8-143d-4857-ab66-c114782e1fe8",
+              "name": "arquitectura",
+              "value": "=A",
+              "type": "string"
+            },
+            {
+              "id": "bb1637c6-6776-4898-a070-1cbdb54a4bd4",
+              "name": "query_original",
+              "value": "={{ $('Entrada Supervisor QA M8').item.json.query_original }}",
+              "type": "string"
+            },
+            {
+              "id": "e29e2ea2-0cfc-4db8-8f93-7da8558a9310",
+              "name": "respuesta_propuesta",
+              "value": "={{ $('Entrada Supervisor QA M8').item.json.respuesta_propuesta }}",
+              "type": "string"
+            },
+            {
+              "id": "955cdb3c-98cf-48f5-8ecf-9a4bf778bd82",
+              "name": "route",
+              "value": "={{ $('Entrada Supervisor QA M8').item.json.route }}",
+              "type": "string"
+            },
+            {
+              "id": "71aae3aa-abf3-462a-b379-d1a7a37a8559",
+              "name": "contexto_airtable",
+              "value": "={{ $json.fields.Contenido || \"\" }}",
+              "type": "string"
+            },
+            {
+              "id": "22d43c3a-2aad-4b8c-aaf1-909777dccbbd",
+              "name": "intento",
+              "value": "1",
+              "type": "string"
+            },
+            {
+              "id": "dfdbd5aa-e624-4141-962a-d87e45f58317",
+              "name": "costo_unitario_llm",
+              "value": "={{ Number($('Entrada Supervisor QA M8').item.json.costo_unitario_llm || 0) }}",
+              "type": "number"
+            },
+            {
+              "id": "fba9d8ee-44be-431d-930e-947b1dd9ac92",
+              "name": "channel",
+              "value": "={{ $('Entrada Supervisor QA M8').item.json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "aa500654-42aa-4438-97bf-0a8ba43f841b",
+              "name": "user_name",
+              "value": "={{ $('Entrada Supervisor QA M8').item.json.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "5831864b-9a56-4b3e-b174-1d9ecbde8dad",
+              "name": "from_email",
+              "value": "={{ $('Entrada Supervisor QA M8').item.json.from_email }}",
+              "type": "string"
+            },
+            {
+              "id": "e6dc32aa-6333-405f-bd73-c5dd8489ce52",
+              "name": "subject",
+              "value": "={{ $('Entrada Supervisor QA M8').item.json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "24bf5b69-7d99-4425-9234-6b48e3d8fea8",
+              "name": "message_id",
+              "value": "={{ $('Entrada Supervisor QA M8').item.json.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "3b75b519-2b06-49ee-a6db-3b82ce37ea7e",
+              "name": "thread_id",
+              "value": "={{ $('Entrada Supervisor QA M8').item.json.thread_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b7c24edd-0f33-40fb-99b7-e04fc88bef2d",
+              "name": "worker",
+              "value": "={{ $('Entrada Supervisor QA M8').item.json.worker }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        288,
+        -112
+      ],
+      "id": "54d465f9-97e5-4d96-b9eb-51e986d2b0f5",
+      "name": "Set - Preparar Evaluacion"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4c6c0234-7025-45f8-a787-b363228820ae",
+              "leftValue": "={{ String($json.contexto_airtable || '').length }}",
+              "rightValue": 10,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        -112
+      ],
+      "id": "322702e0-b913-40e9-93c6-3c76f8ddb6e1",
+      "name": "IF - Contexto Disponible"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.arquitectura }}",
+                    "rightValue": "A",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "3fc1a986-4525-4480-aee1-7c23af12d741"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "A"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "ed4b84ee-f110-4004-897b-eab6ce9ca5db",
+                    "leftValue": "={{ $json.arquitectura }}",
+                    "rightValue": "B",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "B"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        576,
+        -288
+      ],
+      "id": "20c8d5ab-c0eb-403b-8a06-79c9fe89a15e",
+      "name": "Switch - Arquitectura A/B"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "90381e1d-351a-4a99-a930-56b15d83f0e8",
+              "name": "respuesta_candidata",
+              "value": "={{ $json.respuesta_propuesta }}",
+              "type": "string"
+            },
+            {
+              "id": "dc926dbc-e820-4c54-b696-e9772837de67",
+              "name": "qa_variant",
+              "value": "A",
+              "type": "string"
+            },
+            {
+              "id": "3bda69b1-1e80-4ebc-ba31-3f78a0656a65",
+              "name": "trace_id",
+              "value": "={{ $json.trace_id }}",
+              "type": "string"
+            },
+            {
+              "id": "96821213-e9f6-4e9d-9f75-fdf0db85491c",
+              "name": "session_id",
+              "value": "={{ $json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "d2cb4245-bba8-4400-8c53-c79234e23f5b",
+              "name": "query_original",
+              "value": "={{ $json.query_original }}",
+              "type": "string"
+            },
+            {
+              "id": "4e40dbab-be18-4d0d-85bd-f268c9e79418",
+              "name": "route",
+              "value": "={{ $json.route }}",
+              "type": "string"
+            },
+            {
+              "id": "5fb1216b-2db0-44e2-91b2-945bf008c9ce",
+              "name": "contexto_airtable",
+              "value": "={{ $json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "e67de3db-2693-41de-9a77-eaa214530b80",
+              "name": "arquitectura",
+              "value": "={{ $json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "2106434f-6586-4385-84bb-5ce7742d754b",
+              "name": "intento",
+              "value": "={{ $json.intento }}",
+              "type": "string"
+            },
+            {
+              "id": "10cc4fb3-2c19-44e7-975a-0845f355a22c",
+              "name": "costo_unitario_llm",
+              "value": "={{ $json.costo_unitario_llm }}",
+              "type": "number"
+            },
+            {
+              "id": "92540896-3cbc-4a13-b1b2-306ba04d3888",
+              "name": "channel",
+              "value": "={{ $json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "9d533dac-66bb-4495-a7ba-343125ac1e31",
+              "name": "user_name",
+              "value": "={{ $json.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "b65fe0c3-0f2e-4ca9-80cb-28da0af28512",
+              "name": "from_email",
+              "value": "={{ $json.from_email }}",
+              "type": "string"
+            },
+            {
+              "id": "ad6dea9f-843d-4dca-bea0-0b67040dbaf6",
+              "name": "subject",
+              "value": "={{ $json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "ffe09eae-8431-4f2a-bca5-9e80e954bbea",
+              "name": "message_id",
+              "value": "={{ $json.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "c473ebf7-f642-4c48-8921-036dec068e76",
+              "name": "worker",
+              "value": "={{ $json.worker }}",
+              "type": "string"
+            },
+            {
+              "id": "0ae5f4f6-6131-4a7b-9a8e-07faa1d764ff",
+              "name": "thread_id",
+              "value": "={{ $json.thread_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        848,
+        -384
+      ],
+      "id": "4f2a0f65-4eb0-4971-bdda-69ba8ae3f2d0",
+      "name": "Set - Candidato A"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Eres el supervisor factual de un sistema empresarial.\n\nDebes evaluar una respuesta propuesta utilizando SOLAMENTE la consulta original y el contexto autorizado proporcionado.\n\nQUERY ORIGINAL:\n{{ $json.query_original }}\n\nCONTEXTO RECUPERADO DE AIRTABLE:\n{{ $json.contexto_airtable }}\n\nRESPUESTA CANDIDATA:\n{{ $json.respuesta_candidata }}\n\nRAMA DE ARQUITECTURA:\n{{ $json.qa_variant }}\n\nRÚBRICA DE EXACTITUD FACTUAL:\n\n5 = RESPUESTA COMPLETA Y CORRECTA.\nTodos los hechos solicitados por el usuario están respondidos correctamente y respaldados explícitamente por el contexto autorizado.\n\n4 = RESPUESTA CORRECTA CON DIFERENCIAS NO FACTUALES.\nTodos los datos factuales solicitados por el usuario están presentes y son correctos.\nSolo puede haber diferencias de redacción, brevedad, orden o estilo.\nIMPORTANTE: si falta un dato factual solicitado explícitamente por el usuario, NO puede recibir 4.\n\n3 = RESPUESTA PARCIALMENTE CORRECTA Y CORREGIBLE.\nLos datos proporcionados son correctos, pero falta EXACTAMENTE uno de los datos, condiciones o requisitos que:\n1. fue solicitado explícitamente por el usuario, y\n2. aparece explícitamente en el CONTEXTO AUTORIZADO.\n\nEl dato ausente debe poder añadirse sin cambiar ni eliminar los hechos ya presentes.\n\nSi se cumplen estas condiciones, asigna SIEMPRE: exactitud_factual = 3\nestado_veredicto = \"CORREGIR\"\n\n2 = ERROR FACTUAL IMPORTANTE.\nLa respuesta contiene al menos una afirmación factual falsa, inventada, no respaldada o contradictoria con el contexto, pero conserva parcialmente información correcta.\n\n1 = RESPUESTA FUNDAMENTALMENTE INCORRECTA.\nLa respuesta está basada principalmente en información inventada, contradictoria o completamente ajena al contexto.\n\nPROCEDIMIENTO DE DECISIÓN OBLIGATORIO:\n\nPASO 1:\nIdentifica cuántos datos factuales solicita explícitamente QUERY ORIGINAL.\n\nPASO 2:\nComprueba cuáles de esos datos aparecen explícitamente en CONTEXTO AUTORIZADO.\n\nPASO 3:\nCompara esos datos con RESPUESTA CANDIDATA.\n\nPASO 4:\nAplica estas reglas en orden:\nA) Si la respuesta contiene información falsa, inventada o contradictoria: usar 1 o 2 según gravedad.\n\nB) Si no contiene información falsa y responde TODOS los datos factuales solicitados: usar 4 o 5.\n\nC) Si no contiene información falsa, pero falta EXACTAMENTE UN dato factual solicitado explícitamente que sí aparece en el contexto: usar EXACTAMENTE 3 / CORREGIR.\n\nNo clasifiques el caso C como ACEPTADO.\n\nREGLAS OBLIGATORIAS DE VEREDICTO:\n- exactitud_factual 4 o 5 => estado_veredicto = \"ACEPTADO\"\n- exactitud_factual 3 => estado_veredicto = \"CORREGIR\"\n- exactitud_factual 1 o 2 => estado_veredicto = \"RECHAZADO\"\n\nREGLAS DE EVALUACIÓN:\n- Evalúa exactamente la RESPUESTA CANDIDATA recibida.\n- La RAMA DE ARQUITECTURA identifica únicamente el origen de la respuesta y no debe modificar la calificación.\n- No evalúes estilo salvo que afecte la precisión factual.\n- No utilices conocimiento externo.\n- No completes información ausente.\n- No agregues explicaciones fuera del esquema estructurado.\n\n\nDevuelve también, sin modificar:\n- respuesta_candidata: copia literalmente la respuesta evaluada.\n- rama_proveniente: copia exactamente A o B según la entrada recibida.\n\n\nREGLA DE ABSTENCIÓN Y ESCALAMIENTO\n\nLa respuesta candidata puede contener una señal de que el Worker no dispone de información suficiente para responder.\n\nConsiderá como señales de abstención expresiones como:\n- \"No sé\"\n- \"No dispongo de información suficiente\"\n- \"No tengo información suficiente\"\n- \"No se encontró información suficiente\"\n- cualquier respuesta equivalente que indique ausencia de evidencia o imposibilidad de responder.\n\nSi la respuesta candidata es una abstención:\n\n1. NO debe ser considerada una respuesta apta para despacho automático al cliente.\n2. NO debe recibir estado_veredicto = \"ACEPTADO\".\n3. Debe asignarse:\n   estado_veredicto = \"RECHAZADO\"\n4. La exactitud_factual debe reflejar que no existe una respuesta factual suficiente para resolver la consulta. Utilizá la rúbrica normal de puntuación y no inventes información para completar la respuesta.\n5. No reemplaces \"No sé\" con información externa ni generes una respuesta alternativa.\n6. El objetivo del rechazo es bloquear el despacho automático y permitir que el flujo superior derive el caso a revisión humana.\n\nEsta regla aplica independientemente de la ruta que produjo la respuesta.",
+        "hasOutputParser": true,
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        1168,
+        -304
+      ],
+      "id": "4544abd1-ecfd-405d-885b-ac8b09ae9738",
+      "name": "LLM - Juez QA"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Actúas como una capa de refinamiento factual.\n\nCONSULTA ORIGINAL:\n{{ $json.query_original }}\n\nCONTEXTO AUTORIZADO:\n{{ $json.contexto_airtable }}\n\nRESPUESTA PROPUESTA:\n{{ $json.respuesta_propuesta }}\n\nTu tarea es mejorar la respuesta propuesta únicamente cuando sea necesario.\n\nREGLAS:\n- Usa exclusivamente hechos respaldados por CONTEXTO AUTORIZADO.\n- No inventes información.\n- No agregues políticas, precios, fechas o condiciones que no estén presentes.\n- Conserva una respuesta breve y directamente útil.\n- No expliques el proceso interno.\n- Devuelve únicamente la respuesta corregida destinada al usuario.",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        768,
+        -192
+      ],
+      "id": "b11498ec-5163-4d73-9d07-2dd7d1c09de3",
+      "name": "LLM - Refinar Arquitectura B"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        784,
+        -32
+      ],
+      "id": "1f22ffc6-9167-4a64-ac82-a11bf4aea407",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CREDENTIALS_PLACEHOLDER",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "973f1c64-a16c-425c-a0f6-2bc8721f5978",
+              "name": "respuesta_candidata",
+              "value": "={{ $json.text || $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "3c6cc888-03f6-4554-8131-5f8eca505656",
+              "name": "qa_variant",
+              "value": "B",
+              "type": "string"
+            },
+            {
+              "id": "ec0c6f43-8557-4d75-87a3-faa4310b4c9e",
+              "name": "trace_id",
+              "value": "={{ $('IF - Contexto Disponible').item.json.trace_id }}",
+              "type": "string"
+            },
+            {
+              "id": "2134cd76-e0a6-4861-9409-5e221a72b1f0",
+              "name": "session_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "edf2dd31-683a-4457-be6f-3a07a23ee440",
+              "name": "arquitectura",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "09c0a616-15ce-4372-b2b1-21b9f0056682",
+              "name": "query_original",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.query_original }}",
+              "type": "string"
+            },
+            {
+              "id": "c5ed6201-60a8-4167-844e-63a04a931b4c",
+              "name": "respuesta_propuesta",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.respuesta_propuesta }}",
+              "type": "string"
+            },
+            {
+              "id": "96aafc28-d023-4f33-a993-1ee0bbb17cc9",
+              "name": "route",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.route }}",
+              "type": "string"
+            },
+            {
+              "id": "ecfffde3-4803-468f-9cd5-54f79b9a71d9",
+              "name": "contexto_airtable",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "3df59527-37eb-43ef-aaef-4f2158b3b082",
+              "name": "intento",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.intento }}",
+              "type": "string"
+            },
+            {
+              "id": "38571763-2731-475a-ba09-081e36fe8b0d",
+              "name": "costo_unitario_llm",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.costo_unitario_llm }}",
+              "type": "number"
+            },
+            {
+              "id": "38283147-cc1b-4c91-8d33-8570e9da8c19",
+              "name": "channel",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "6a7d3a51-1ca7-4065-b586-3b803ca19322",
+              "name": "user_name",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "c166d896-4b80-4c6e-810e-1df9174f4bf5",
+              "name": "from_email",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.from_email }}",
+              "type": "string"
+            },
+            {
+              "id": "a9701e86-5d19-4306-817a-bfb550fa2288",
+              "name": "subject",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "5543faa5-0b8c-4bb8-a4d9-0e5d0e63f71f",
+              "name": "message_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "93ebc19f-cdc2-4369-9ee1-d6a8eec8aebf",
+              "name": "thread_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.thread_id }}",
+              "type": "string"
+            },
+            {
+              "id": "5e418b83-26b6-461e-95f4-d4991ccd71ec",
+              "name": "worker",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.worker }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1024,
+        -192
+      ],
+      "id": "3c9f2fb0-7ec6-49ff-90f4-3497d1c3eccf",
+      "name": "Set - Candidato B"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        -144
+      ],
+      "id": "cd975a8b-217a-4d72-ad16-dc4feaddc35a",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "CREDENTIALS_PLACEHOLDER",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"respuesta_candidata\": {\n      \"type\": \"string\"\n    },\n    \"rama_proveniente\": {\n      \"type\": \"string\",\n      \"enum\": [\"A\", \"B\"]\n    },\n    \"exactitud_factual\": {\n      \"type\": \"integer\",\n      \"minimum\": 1,\n      \"maximum\": 5\n    },\n    \"estado_veredicto\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"ACEPTADO\",\n        \"CORREGIR\",\n        \"RECHAZADO\"\n      ]\n    }\n  },\n  \"required\": [\n    \"respuesta_candidata\",\n    \"rama_proveniente\",\n    \"exactitud_factual\",\n    \"estado_veredicto\"\n  ],\n  \"additionalProperties\": false\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1312,
+        -144
+      ],
+      "id": "8168deb1-9e2d-4ea4-ae68-58f8a76945af",
+      "name": "Structured Output Parser - JUEZ"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d90c6216-45ad-47e7-b609-9221dd8a6a03",
+              "name": "exactitud_factual",
+              "value": "={{ Number($json.output.exactitud_factual) }}",
+              "type": "number"
+            },
+            {
+              "id": "c88e56a3-719c-4e9b-9c13-dee955458442",
+              "name": "estado_veredicto",
+              "value": "={{ $json.output.estado_veredicto }}",
+              "type": "string"
+            },
+            {
+              "id": "e671a771-3154-414e-b31d-2738f6a88f63",
+              "name": "intento",
+              "value": "1",
+              "type": "string"
+            },
+            {
+              "id": "be687ed2-77ae-471c-9404-eb00b765a66e",
+              "name": "qa_variant",
+              "value": "={{ $json.output.rama_proveniente }}",
+              "type": "string"
+            },
+            {
+              "id": "23aed730-a998-4d6e-a04e-8892c0f431bf",
+              "name": "respuesta_candidata",
+              "value": "={{\n  $('Set - Preparar Evaluacion').item.json.arquitectura === 'A'\n    ? $('Set - Candidato A').item.json.respuesta_candidata\n    : $('Set - Candidato B').item.json.respuesta_candidata\n}}",
+              "type": "string"
+            },
+            {
+              "id": "9397fa03-d7ed-41b2-8155-895cc797bf75",
+              "name": "session_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "8b477788-a4c6-473f-9f9a-cca3f53c050e",
+              "name": "arquitectura",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "6454a1c5-a81a-427f-baf1-fa2217dde2d2",
+              "name": "route",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.route }}",
+              "type": "string"
+            },
+            {
+              "id": "d22d11af-f16f-41a4-adc9-550e86236919",
+              "name": "worker",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.worker }}",
+              "type": "string"
+            },
+            {
+              "id": "fe2a7ed1-6517-4be0-965d-118bd06a6420",
+              "name": "query_original",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.query_original }}",
+              "type": "string"
+            },
+            {
+              "id": "0dbb602b-46d5-44b0-930b-38a72d7f8e22",
+              "name": "contexto_airtable",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "0e23a0eb-cf59-43c9-87fb-4d0372d559e0",
+              "name": "costo_unitario_llm",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.costo_unitario_llm }}",
+              "type": "string"
+            },
+            {
+              "id": "e1330c8b-1249-4200-bf48-ed39ff7649c8",
+              "name": "trace_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.trace_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        -304
+      ],
+      "id": "31d05602-964e-4a4f-9b7b-3b66cefab8cd",
+      "name": "Set - Resultado Juez 1"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "AIRTABLE_BASE_ID",
+          "mode": "list",
+          "cachedResultName": "Memoria Agente - Soluciones Globales Tech",
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
+        },
+        "table": {
+          "__rl": true,
+          "value": "CREDENTIALS_PLACEHOLDER",
+          "mode": "list",
+          "cachedResultName": "QA_M8_Log",
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Fecha": "={{ $now }}",
+            "Arquitectura": "={{ $('Set - Preparar Evaluacion').item.json.arquitectura }}",
+            "Session_ID": "={{ $('Set - Preparar Evaluacion').item.json.session_id }}",
+            "Ruta": "={{ $('Set - Preparar Evaluacion').item.json.route }}",
+            "Query": "={{ $('Set - Preparar Evaluacion').item.json.query_original }}",
+            "Respuesta": "={{ $json.respuesta_candidata }}",
+            "Intento": "={{ $json.intento }}",
+            "LLM_Calls": "={{ $json.qa_variant === 'A' ? 2 : $json.qa_variant === 'B' ? 3 : 0 }}",
+            "Exactitud_Factual": "={{ Number($('Set - Resultado Juez 1').item.json.exactitud_factual) }}",
+            "Estado_Veredicto": "={{ $json.estado_veredicto }}",
+            "Costo_Estimado_USD": "={{\n(\n  $json.qa_variant === 'A'\n    ? 2\n    : $json.qa_variant === 'B'\n      ? 3\n      : 0\n)\n*\nNumber($json.costo_unitario_llm || 0)\n}}",
+            "Trace_id": "={{ $json.trace_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Trace_id",
+              "displayName": "Trace_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha",
+              "displayName": "Fecha",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Arquitectura",
+              "displayName": "Arquitectura",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "A",
+                  "value": "A"
+                },
+                {
+                  "name": "B",
+                  "value": "B"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Session_ID",
+              "displayName": "Session_ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Ruta",
+              "displayName": "Ruta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Query",
+              "displayName": "Query",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Respuesta",
+              "displayName": "Respuesta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Intento",
+              "displayName": "Intento",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Exactitud_Factual",
+              "displayName": "Exactitud_Factual",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Estado_Veredicto",
+              "displayName": "Estado_Veredicto",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "ACEPTADO",
+                  "value": "ACEPTADO"
+                },
+                {
+                  "name": "CORREGIR",
+                  "value": "CORREGIR"
+                },
+                {
+                  "name": "RECHAZADO",
+                  "value": "RECHAZADO"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "LLM_Calls",
+              "displayName": "LLM_Calls",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Costo_Estimado_USD",
+              "displayName": "Costo_Estimado_USD",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Resultado_Final",
+              "displayName": "Resultado_Final",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1632,
+        -304
+      ],
+      "id": "90dfaa33-02d9-44ec-ab8c-e496b5c7fd03",
+      "name": "Airtable - Log QA Intento 1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "CREDENTIALS_PLACEHOLDER",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Set - Resultado Juez 1').item.json.estado_veredicto }}",
+                    "rightValue": "ACEPTADO",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "2c0f72ce-64cf-4f5f-9c40-cc7f520e6603"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ACEPTADO"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "7cd8af05-8ab7-4c38-addd-3cbad9fdd89f",
+                    "leftValue": "={{ $('Set - Resultado Juez 1').item.json.estado_veredicto }}",
+                    "rightValue": "CORREGIR",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "CORREGIR"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "be511f29-b2c0-470c-bd89-21a04ef8a24d",
+                    "leftValue": "={{ $('Set - Resultado Juez 1').item.json.estado_veredicto }}",
+                    "rightValue": "RECHAZADO",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "RECHAZADO"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1808,
+        -320
+      ],
+      "id": "5f491868-1ed9-4a71-b97f-a1eff45bdbf4",
+      "name": "Switch - Veredicto QA"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9b48add0-cddc-4c54-93d5-545da4e96cc1",
+              "leftValue": "={{ $('Set - Resultado Juez 1').item.json.estado_veredicto }}",
+              "rightValue": "ACEPTADO",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "9ae7cb4e-fbc4-4a4f-aede-8757c1b6030f",
+              "leftValue": "={{ Number($('Set - Resultado Juez 1').item.json.exactitud_factual) }}",
+              "rightValue": 4,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1936,
+        -480
+      ],
+      "id": "22309e0c-b084-43be-baed-16503c91d55f",
+      "name": "IF - Exactitud Aceptable"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "111399e8-fc25-4a02-8112-068eb70377de",
+              "name": "qa_release",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "fa409d59-7827-4c23-8c8a-099d943750ba",
+              "name": "qa_status",
+              "value": "QA_ACCEPTED",
+              "type": "string"
+            },
+            {
+              "id": "64ff0886-93f8-457a-8eba-a0e7cdf6b069",
+              "name": "session_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "e6737f39-26e5-426c-b297-06c0807ec805",
+              "name": "arquitectura",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "318d5cdc-6264-422a-a2d9-1cc47227e632",
+              "name": "exactitud_factual",
+              "value": "={{ Number( $('Set - Resultado Juez 1').item.json.exactitud_factual) }}",
+              "type": "number"
+            },
+            {
+              "id": "b9568312-dc55-4a25-af06-f3960da5fcb6",
+              "name": "estado_veredicto",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.estado_veredicto }}",
+              "type": "string"
+            },
+            {
+              "id": "5e24a54b-8807-4a6f-a4bd-23e8dc710fec",
+              "name": "respuesta_final",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.respuesta_candidata }}",
+              "type": "string"
+            },
+            {
+              "id": "2ee8688a-6e32-4f7a-afda-e63ce4cf443d",
+              "name": "route",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.route }}",
+              "type": "string"
+            },
+            {
+              "id": "72fc89e4-7fa5-4222-8bff-8fc85b1e7d4b",
+              "name": "channel",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "d9c9302a-9eac-4cb5-8f56-deb5e3fee4f9",
+              "name": "from_email",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.from_email }}",
+              "type": "string"
+            },
+            {
+              "id": "002ab18d-e30a-4782-87a8-20e339c6780b",
+              "name": "subject",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "789f4e89-a4d3-4a98-b951-3e1a02058d9c",
+              "name": "message_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "62dabdb2-3762-4c48-93fa-26d8c63a3d77",
+              "name": "thread_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.thread_id }}",
+              "type": "string"
+            },
+            {
+              "id": "92236b38-0fed-47de-a8ef-d779691507c2",
+              "name": "worker",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.worker }}",
+              "type": "string"
+            },
+            {
+              "id": "e596ffce-799a-4616-8073-13a70f82d7ca",
+              "name": "user_name",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "c684a29c-50f7-4955-b713-74f79784ab99",
+              "name": "decision_humana",
+              "value": "NO_REQUERIDA",
+              "type": "string"
+            },
+            {
+              "id": "a32a652f-94c8-467f-b728-51538eb9a0cb",
+              "name": "intento",
+              "value": 1,
+              "type": "number"
+            },
+            {
+              "id": "5b0a2a40-8bdd-4e3a-9241-7e63fe332b67",
+              "name": "costo_estimado_usd",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.costo_unitario_llm }}",
+              "type": "string"
+            },
+            {
+              "id": "0380bca4-ed1f-4fcf-ba21-43b9a0046559",
+              "name": "trace_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.trace_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2848,
+        -528
+      ],
+      "id": "b1cbb9ce-7ad4-4269-8dd0-060b1c1444c3",
+      "name": "Set - QA Aprobado"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Debes corregir una respuesta que no alcanzó el nivel mínimo de exactitud factual.\n\nQUERY ORIGINAL:\n{{ $('Set - Preparar Evaluacion').item.json.query_original }}\n\nCONTEXTO AUTORIZADO:\n{{ $('Set - Preparar Evaluacion').item.json.contexto_airtable }}\n\nRESPUESTA ANTERIOR:\n{{ $('Set - Resultado Juez 1').item.json.respuesta_candidata }}\n\nRESULTADO DEL JUEZ:\nExactitud factual: {{ $('Set - Resultado Juez 1').item.json.exactitud_factual }}\nVeredicto: {{ $('Set - Resultado Juez 1').item.json.estado_veredicto }}\n\nLa respuesta anterior requiere corrección.\n\nREGLAS:\n- Reconstruye la respuesta usando únicamente CONTEXTO AUTORIZADO.\n- Elimina cualquier afirmación que no pueda verificarse en ese contexto.\n- Responde directamente la consulta.\n- No menciones al juez.\n- No menciones el proceso de corrección.\n- No inventes datos.\n- Devuelve únicamente la nueva respuesta destinada al usuario.",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        2080,
+        -320
+      ],
+      "id": "2c5e420d-015c-4d88-8542-afe36dc4313b",
+      "name": "LLM - Self Healing"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Eres el supervisor factual de un sistema empresarial.\n\nDebes evaluar una respuesta propuesta utilizando SOLAMENTE la consulta original y el contexto autorizado proporcionado.\n\nQUERY ORIGINAL:\n{{ $('Set - Preparar Evaluacion').item.json.query_original }}\n\nCONTEXTO RECUPERADO DE AIRTABLE:\n{{ $('Set - Preparar Evaluacion').item.json.contexto_airtable }}\n\nRESPUESTA PROPUESTA:\n{{ $json.text }}\n\nRÚBRICA DE EXACTITUD FACTUAL:\n\n5 = Completamente correcta y respaldada por el contexto autorizado.\n4 = Correcta en lo esencial, sin errores factuales relevantes.\n3 = Parcialmente correcta, pero contiene una imprecisión que debe corregirse.\n2 = Contiene errores factuales importantes o afirmaciones no suficientemente respaldadas.\n1 = Es fundamentalmente incorrecta, inventada o contradice el contexto.\n\nREGLAS DE VEREDICTO:\n\n- exactitud_factual 4 o 5 → ACEPTADO\n- exactitud_factual 3 → CORREGIR\n- exactitud_factual 1 o 2 → RECHAZADO\n\nREGLAS OBLIGATORIAS:\n\n- No utilices conocimiento externo.\n- No inventes información ausente.\n- Evalúa exclusivamente exactitud factual.\n- No evalúes estilo salvo que afecte la exactitud.\n- Si un dato no aparece en el contexto, no debes asumirlo.\n- Devuelve únicamente la estructura solicitada.",
+        "hasOutputParser": true,
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        2336,
+        -320
+      ],
+      "id": "0f8776a4-4b88-47bc-bf78-75baa76da67f",
+      "name": "LLM - Juez QA Reintento"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {
+          "temperature": 0
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        2320,
+        -176
+      ],
+      "id": "556364cd-6bef-4e48-be73-f25ae2003d12",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "CREDENTIALS_PLACEHOLDER",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"respuesta_candidata\": {\n      \"type\": \"string\"\n    },\n    \"rama_proveniente\": {\n      \"type\": \"string\",\n      \"enum\": [\"A\", \"B\"]\n    },\n    \"exactitud_factual\": {\n      \"type\": \"integer\",\n      \"minimum\": 1,\n      \"maximum\": 5\n    },\n    \"estado_veredicto\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"ACEPTADO\",\n        \"CORREGIR\",\n        \"RECHAZADO\"\n      ]\n    }\n  },\n  \"required\": [\n    \"respuesta_candidata\",\n    \"rama_proveniente\",\n    \"exactitud_factual\",\n    \"estado_veredicto\"\n  ],\n  \"additionalProperties\": false\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2480,
+        -144
+      ],
+      "id": "95627019-06e1-4963-a3ac-1b30f0b1c07b",
+      "name": "Structured Output Parser - Juez 2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "83b4b9cd-737d-41ee-bfb7-292639e2ab8a",
+              "name": "session_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "f71bd5d9-f3c3-48ec-ad49-688f4676452d",
+              "name": "arquitectura",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.qa_variant }}",
+              "type": "string"
+            },
+            {
+              "id": "cf183d95-140c-49c5-accc-603f32642663",
+              "name": "route",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.route }}",
+              "type": "string"
+            },
+            {
+              "id": "c7426ea1-b705-42de-9869-8474f5409055",
+              "name": "worker",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.worker }}",
+              "type": "string"
+            },
+            {
+              "id": "5750aa17-61c8-474e-b45b-9d2808c924c4",
+              "name": "query_original",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.query_original }}",
+              "type": "string"
+            },
+            {
+              "id": "bf2677a8-8f53-4e26-9fc7-9bc7b91efe4b",
+              "name": "contexto_airtable",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "b8b8559d-941e-4e1c-b786-b087d3906784",
+              "name": "respuesta_original",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.respuesta_propuesta }}",
+              "type": "string"
+            },
+            {
+              "id": "da9de575-4809-4c9a-9e03-ccbdfd9307aa",
+              "name": "respuesta_candidata",
+              "value": "={{ $json.output.respuesta_candidata }}",
+              "type": "string"
+            },
+            {
+              "id": "edf6ff0e-2deb-411f-87ab-855f1802f4d9",
+              "name": "exactitud_factual",
+              "value": "={{ Number($json.output.exactitud_factual) }}",
+              "type": "number"
+            },
+            {
+              "id": "8f9f77c0-bbc6-4c4f-b530-3f79371f58c8",
+              "name": "estado_veredicto",
+              "value": "={{ $json.output.estado_veredicto }}",
+              "type": "string"
+            },
+            {
+              "id": "0f476b8f-816e-4545-824a-2607517bf76e",
+              "name": "intento",
+              "value": 2,
+              "type": "number"
+            },
+            {
+              "id": "0d25fc7e-2a24-49af-b82f-ef1d4837e284",
+              "name": "channel",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "cf93f017-2a36-464c-b9be-9a986cb22cb9",
+              "name": "user_name",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "a73ab6a4-1dee-4a53-b739-e8dcf2339d23",
+              "name": "from_email",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.from_email }}",
+              "type": "string"
+            },
+            {
+              "id": "6382fb46-3ebf-4276-b570-01b48146809e",
+              "name": "subject",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "65942e85-3cb0-4923-8736-88188d22aae1",
+              "name": "message_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "664ba4e2-ff5b-463d-851f-fc30a6793b27",
+              "name": "thread_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.thread_id }}",
+              "type": "string"
+            },
+            {
+              "id": "6f02da5a-817e-442e-a22e-f678b29f5f39",
+              "name": "llm_calls",
+              "value": "={{\n  String($('Set - Resultado Juez 1').item.json.arquitectura).trim().toUpperCase() === 'A'\n    ? 4\n    : String($('Set - Resultado Juez 1').item.json.arquitectura).trim().toUpperCase() === 'B'\n      ? 5\n      : 0\n}}",
+              "type": "number"
+            },
+            {
+              "id": "618af9bf-88f7-4df9-b58a-839833d8397e",
+              "name": "costo_estimado_usd",
+              "value": "={{ \n  (String($json.arquitectura).trim().toUpperCase() === 'B' ? 5 : 4)\n  * Number($json.costo_unitario_llm || 0)\n}}",
+              "type": "number"
+            },
+            {
+              "id": "0e5a21b0-2cd3-4ae8-8da1-0ec4aaf0f5bf",
+              "name": "trace_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.trace_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2608,
+        -320
+      ],
+      "id": "c83cb29d-8856-4638-843a-f4a2eb6a0cb5",
+      "name": "Set - Resultado Juez 2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7e53614b-ee43-4e9e-ab9e-b9e322d2da6d",
+              "leftValue": "={{ $('Set - Resultado Juez 2').item.json.estado_veredicto }}",
+              "rightValue": "ACEPTADO",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "daf9a5e9-9e55-4f74-a30b-ad7dfc54a70b",
+              "leftValue": "={{ $('Set - Resultado Juez 2').item.json.exactitud_factual }}",
+              "rightValue": 4,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2944,
+        -320
+      ],
+      "id": "8aed3b02-5c4c-4f34-825e-f39c320ef17d",
+      "name": "IF - Reintento Aceptado"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe764f75-7a32-4adb-8548-4c48d90c1078",
+              "name": "qa_release",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "82a92a16-d5e1-4f82-816f-6f6bf63db8f8",
+              "name": "qa_status",
+              "value": "AUTO_CORRECTED_ACCEPTED",
+              "type": "string"
+            },
+            {
+              "id": "a4124afe-b93d-4169-8aab-ba088bfadd1a",
+              "name": "respuesta_final",
+              "value": "={{ $json.fields.Resultado_Final }}",
+              "type": "string"
+            },
+            {
+              "id": "15c10328-561f-4205-8fd0-cb09bd0fb003",
+              "name": "exactitud_factual",
+              "value": "={{ $json.fields.Exactitud_Factual }}",
+              "type": "string"
+            },
+            {
+              "id": "21332d24-f956-47b5-8d6c-ebc3f8804b73",
+              "name": "estado_veredicto",
+              "value": "={{ $json.fields.Estado_Veredicto }}",
+              "type": "string"
+            },
+            {
+              "id": "7629b839-2912-4e6e-8da0-4123113bb5a8",
+              "name": "intento",
+              "value": 2,
+              "type": "number"
+            },
+            {
+              "id": "1fc0b913-479e-4c2b-b68b-320ed5f606d9",
+              "name": "decision_humana",
+              "value": "NO_REQUERIDA",
+              "type": "string"
+            },
+            {
+              "id": "cb8be5b6-d479-48bb-8a07-96f96ec87530",
+              "name": "session_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "2d0993c6-36e6-4dde-bfbd-5b49abbf96c3",
+              "name": "arquitectura",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "8f23407f-ffac-46c4-92b9-476193157a67",
+              "name": "query_original",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.query_original }}",
+              "type": "string"
+            },
+            {
+              "id": "31906025-e6af-4aa6-a2a1-b2f87ead9bd7",
+              "name": "route",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.route }}",
+              "type": "string"
+            },
+            {
+              "id": "08964ee0-51e0-4db2-bfc1-c323a7283f4c",
+              "name": "contexto_airtable",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "af8214d9-d200-4887-bb54-9827539f9b3b",
+              "name": "channel",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "8dba2c66-d88b-4495-8962-37758a82b740",
+              "name": "user_name",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "2c1f6cd6-9207-44ca-b0a8-7deef54b32e4",
+              "name": "from_email",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.from_email }}",
+              "type": "string"
+            },
+            {
+              "id": "563bb295-2763-4c2c-be00-52a187e5a116",
+              "name": "subject",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "66106a8e-bd2e-4d37-aaad-67cbc993179d",
+              "name": "message_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "422aa63a-f05e-4b9e-9034-e90ddd5a8a63",
+              "name": "thread_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.thread_id }}",
+              "type": "string"
+            },
+            {
+              "id": "f52bdc86-5b25-4b98-a024-5213a81773c7",
+              "name": "costo_estimado_usd",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.costo_estimado_usd }}",
+              "type": "number"
+            },
+            {
+              "id": "bcb1de19-5254-4b5d-8a3f-952d7ae71b3e",
+              "name": "trace_id",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.trace_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3088,
+        -416
+      ],
+      "id": "60ad9b2a-9cb7-4b9f-b357-d596e67f2942",
+      "name": "Set - QA Aprobado Reintento"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "CREDENTIALS_PLACEHOLDER",
+          "mode": "list",
+          "cachedResultName": "Memoria Agente - Soluciones Globales Tech",
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
+        },
+        "table": {
+          "__rl": true,
+          "value": "CREDENTIALS_PLACEHOLDER",
+          "mode": "list",
+          "cachedResultName": "QA_M8_Log",
+          "cachedResultUrl": "CREDENTIALS_PLACEHOLDER"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Intento": 2,
+            "Exactitud_Factual": "={{ $json.exactitud_factual }}",
+            "LLM_Calls": "={{ $json.llm_calls }}",
+            "Costo_Estimado_USD": "={{ $json.costo_estimado_usd }}",
+            "Fecha": "={{ $now }}",
+            "Arquitectura": "={{ $json.arquitectura }}",
+            "Session_ID": "={{ $json.session_id }}",
+            "Ruta": "={{ $json.route }}",
+            "Query": "={{ $json.query_original }}",
+            "Respuesta": "={{ $json.respuesta_candidata }}",
+            "Estado_Veredicto": "={{ $json.estado_veredicto }}",
+            "Resultado_Final": "={{ $json.respuesta_candidata }}",
+            "Trace_id": "={{ $json.trace_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Trace_id",
+              "displayName": "Trace_id",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha",
+              "displayName": "Fecha",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Arquitectura",
+              "displayName": "Arquitectura",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "A",
+                  "value": "A"
+                },
+                {
+                  "name": "B",
+                  "value": "B"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Session_ID",
+              "displayName": "Session_ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Ruta",
+              "displayName": "Ruta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Query",
+              "displayName": "Query",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Respuesta",
+              "displayName": "Respuesta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Intento",
+              "displayName": "Intento",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Exactitud_Factual",
+              "displayName": "Exactitud_Factual",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Estado_Veredicto",
+              "displayName": "Estado_Veredicto",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "ACEPTADO",
+                  "value": "ACEPTADO"
+                },
+                {
+                  "name": "CORREGIR",
+                  "value": "CORREGIR"
+                },
+                {
+                  "name": "RECHAZADO",
+                  "value": "RECHAZADO"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "LLM_Calls",
+              "displayName": "LLM_Calls",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Costo_Estimado_USD",
+              "displayName": "Costo_Estimado_USD",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Resultado_Final",
+              "displayName": "Resultado_Final",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        2784,
+        -320
+      ],
+      "id": "9c5eee11-869d-4b55-ace0-181aa9569f5d",
+      "name": "Airtable - Log QA Intento 2",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "CREDENTIALS_PLACEHOLDER",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "internal-review@example.com",
+        "subject": "=[M8 QA] Revisión humana requerida - {{ $json.trace_id }}",
+        "message": "=El supervisor QA detuvo una respuesta por insuficiente exactitud factual.\n\nTraceID:\n{{ $json.trace_id }}\n\nARQUITECTURA:\n{{ $json.arquitectura }}\n\nCONSULTA:\n{{ $json.query_original }}\n\nRESPUESTA PROPUESTA:\n{{ $json.respuesta_candidata }}\n\nEXACTITUD:\n{{ $json.exactitud_factual }}/5\n\nVEREDICTO:\n{{ $json.estado_veredicto }}\n\nLa respuesta no será liberada automáticamente.\n\nSeleccione APROBAR únicamente si la respuesta puede utilizarse tal como está.\nSeleccione RECHAZAR si debe bloquearse o corregirse manualmente.",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "APROBAR",
+            "disapproveLabel": "RECHAZAR"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        3376,
+        16
+      ],
+      "id": "b60e60ac-bebb-43a1-bf35-d0732085e738",
+      "name": "Gmail - Aprobación Humana QA",
+      "webhookId": "77c8e227-6280-4843-979f-795eb893184c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "V4E4V1b1hjaxhp0K",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "44b20138-2029-4789-8a44-d013aeb9d9e3",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        3552,
+        16
+      ],
+      "id": "d8a07006-d1f7-41a7-b202-bba62c388601",
+      "name": "IF - Humano Aprueba QA"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "12749210-517b-4afc-8079-2beabc57dd1d",
+              "name": "qa_release",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "bda2616c-982f-4492-ac0f-9a82dfb30ee8",
+              "name": "qa_status",
+              "value": "HUMAN_APPROVED",
+              "type": "string"
+            },
+            {
+              "id": "bf500891-3f65-4aff-bc07-5d87d420db71",
+              "name": "respuesta_final",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.respuesta_candidata }}",
+              "type": "string"
+            },
+            {
+              "id": "f053afd0-9d7d-4b72-893f-bd879ec4033b",
+              "name": "decision_humana",
+              "value": "APPROVED",
+              "type": "string"
+            },
+            {
+              "id": "405396ad-6303-4f5c-b01e-fdf2422e16f9",
+              "name": "arquitectura",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "7a905c4b-f93d-4bb6-9d59-fab09591116f",
+              "name": "route",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.route }}",
+              "type": "string"
+            },
+            {
+              "id": "dcbaff25-a6a1-4a04-9fbf-1c5d144a0bb5",
+              "name": "worker",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.worker }}",
+              "type": "string"
+            },
+            {
+              "id": "e5431913-e0b5-4f1a-abf1-189ca1718471",
+              "name": "query_original",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.query_original }}",
+              "type": "string"
+            },
+            {
+              "id": "3feef5c9-540b-43c4-8596-a436d14b1e2a",
+              "name": "contexto_airtable",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "6eb11880-e306-4c39-9ff1-cb8cb806d9f5",
+              "name": "exactitud_factual",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.exactitud_factual }}",
+              "type": "number"
+            },
+            {
+              "id": "cec943c1-9b17-4393-9c1f-fd321bf222b6",
+              "name": "estado_veredicto",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.estado_veredicto }}",
+              "type": "string"
+            },
+            {
+              "id": "6d1a57df-d4a1-44ee-b116-6fa5e5efaba1",
+              "name": "intento",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.intento }}",
+              "type": "number"
+            },
+            {
+              "id": "7380c03f-a564-4d6f-a552-da63cd5194de",
+              "name": "channel",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "dec89f3c-7859-4ce5-a889-cd848678a091",
+              "name": "user_name",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "4b6ee710-2526-4fc3-bcb8-9d930ebd5a59",
+              "name": "from_email",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.from_email }}",
+              "type": "string"
+            },
+            {
+              "id": "6f0965bd-2568-44e9-b948-4838028173a3",
+              "name": "message_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b3c67b52-0823-48b0-b676-7677eacd9570",
+              "name": "thread_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.thread_id }}",
+              "type": "string"
+            },
+            {
+              "id": "05c8b66d-85ac-4903-a0f9-259f2896c046",
+              "name": "llm_calls",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.llm_calls }}",
+              "type": "number"
+            },
+            {
+              "id": "6d24b6d9-db3f-49f9-b0eb-96f77691713e",
+              "name": "costo_estimado_usd",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.costo_unitario_llm }}",
+              "type": "number"
+            },
+            {
+              "id": "9057dbd4-124b-4507-87d0-9c8de3020b4a",
+              "name": "subject",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "0dc4f202-d81e-4148-ad7a-46a6196d123f",
+              "name": "worker",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.worker }}",
+              "type": "string"
+            },
+            {
+              "id": "8e2035f0-9b05-4f9f-bfc5-8d07835e0c29",
+              "name": "session_id",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "a90fb3f9-0371-4c9d-9782-0b9008d1e610",
+              "name": "trace_id",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.trace_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3680,
+        -112
+      ],
+      "id": "c495191e-90a6-40e4-8082-67c829f6d08a",
+      "name": "Set - QA Aprobado Humano"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "12749210-517b-4afc-8079-2beabc57dd1d",
+              "name": "qa_release",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "bda2616c-982f-4492-ac0f-9a82dfb30ee8",
+              "name": "qa_status",
+              "value": "HUMAN_REJECTED",
+              "type": "string"
+            },
+            {
+              "id": "bf500891-3f65-4aff-bc07-5d87d420db71",
+              "name": "respuesta_final",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.respuesta_candidata }}",
+              "type": "string"
+            },
+            {
+              "id": "f053afd0-9d7d-4b72-893f-bd879ec4033b",
+              "name": "decision_humana",
+              "value": "REJECTED",
+              "type": "string"
+            },
+            {
+              "id": "47559a3b-a0d1-4c4d-83bd-4692c385e05e",
+              "name": "session_id",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "405396ad-6303-4f5c-b01e-fdf2422e16f9",
+              "name": "arquitectura",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "7a905c4b-f93d-4bb6-9d59-fab09591116f",
+              "name": "route",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.route }}",
+              "type": "string"
+            },
+            {
+              "id": "dcbaff25-a6a1-4a04-9fbf-1c5d144a0bb5",
+              "name": "worker",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.worker }}",
+              "type": "string"
+            },
+            {
+              "id": "e5431913-e0b5-4f1a-abf1-189ca1718471",
+              "name": "query_original",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.query_original }}",
+              "type": "string"
+            },
+            {
+              "id": "3feef5c9-540b-43c4-8596-a436d14b1e2a",
+              "name": "contexto_airtable",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "6eb11880-e306-4c39-9ff1-cb8cb806d9f5",
+              "name": "exactitud_factual",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.exactitud_factual }}",
+              "type": "number"
+            },
+            {
+              "id": "cec943c1-9b17-4393-9c1f-fd321bf222b6",
+              "name": "estado_veredicto",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.estado_veredicto }}",
+              "type": "string"
+            },
+            {
+              "id": "6d1a57df-d4a1-44ee-b116-6fa5e5efaba1",
+              "name": "intento",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.intento }}",
+              "type": "number"
+            },
+            {
+              "id": "7380c03f-a564-4d6f-a552-da63cd5194de",
+              "name": "channel",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "dec89f3c-7859-4ce5-a889-cd848678a091",
+              "name": "user_name",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "4b6ee710-2526-4fc3-bcb8-9d930ebd5a59",
+              "name": "from_email",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.from_email }}",
+              "type": "string"
+            },
+            {
+              "id": "604e5606-75e2-4a24-9a50-acb15078ebb7",
+              "name": "subject",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "6f0965bd-2568-44e9-b948-4838028173a3",
+              "name": "message_id",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b3c67b52-0823-48b0-b676-7677eacd9570",
+              "name": "thread_id",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.thread_id }}",
+              "type": "string"
+            },
+            {
+              "id": "05c8b66d-85ac-4903-a0f9-259f2896c046",
+              "name": "llm_calls",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.llm_calls }}",
+              "type": "number"
+            },
+            {
+              "id": "6d24b6d9-db3f-49f9-b0eb-96f77691713e",
+              "name": "costo_estimado_usd",
+              "value": "={{ $('Set - Contrato HITL Común').item.json.costo_unitario_llm }}",
+              "type": "number"
+            },
+            {
+              "id": "73889839-e0d2-4f23-a658-19d75e7093ab",
+              "name": "trace_id",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.trace_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3680,
+        160
+      ],
+      "id": "462559a0-a1f3-4ab2-b176-742a43483789",
+      "name": "Set - QA Rechazado Humano"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cb3e584b-1975-4df9-9724-074d23aabf50",
+              "name": "qa_release",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "9e888f72-2875-40fa-8e50-83169e5e817c",
+              "name": "qa_status",
+              "value": "NO_CONTEXT_HITL",
+              "type": "string"
+            },
+            {
+              "id": "b27213cd-976b-4f83-86ac-88ee37f520e3",
+              "name": "trace_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.run_id }}",
+              "type": "string"
+            },
+            {
+              "id": "7b4bbca6-0385-4758-960e-e92c663581de",
+              "name": "session_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "e7c43b2e-71af-4704-b68b-16dc87dbe083",
+              "name": "arquitectura",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "47cca8b4-1c11-4efe-8f5e-04498979b882",
+              "name": "route",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.route }}",
+              "type": "string"
+            },
+            {
+              "id": "0df773b2-e028-4801-84ca-6059ea690c60",
+              "name": "worker",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.worker }}",
+              "type": "string"
+            },
+            {
+              "id": "6669d834-6c4a-46d2-9de4-16452f087e62",
+              "name": "query_original",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.query_original }}",
+              "type": "string"
+            },
+            {
+              "id": "dd889958-2040-483f-b627-8a0507eb944e",
+              "name": "respuesta_candidata",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.respuesta_propuesta }}",
+              "type": "string"
+            },
+            {
+              "id": "ac4a4f9f-98e1-404f-bda7-8b7da5f86598",
+              "name": "exactitud_factual",
+              "value": 0,
+              "type": "number"
+            },
+            {
+              "id": "5264389a-d577-4ab0-844c-4f29301235b0",
+              "name": "estado_veredicto",
+              "value": "RECHAZADO",
+              "type": "string"
+            },
+            {
+              "id": "d08f7d15-ed96-4a03-a0ba-eff5ac68240f",
+              "name": "hitl_reason",
+              "value": "CONTEXTO_QA_NO_DISPONIBLE",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        112
+      ],
+      "id": "57a51818-9e9b-48c8-9d68-bbee82adc87a",
+      "name": "Set - HITL Sin Contexto"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "602508d4-f3d6-49df-a6c6-a1e5ba72e0de",
+              "name": "session_id",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "abedd33a-cf25-4231-b63a-28aead30b4c9",
+              "name": "arquitectura",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "9dc9e430-a32c-41d6-a793-6c0280c5daa5",
+              "name": "route",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.route }}",
+              "type": "string"
+            },
+            {
+              "id": "eba726d5-b695-426a-8df1-0e8a9d6c3b7a",
+              "name": "worker",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.worker }}",
+              "type": "string"
+            },
+            {
+              "id": "2c4b41db-364b-4164-bda1-3869cf4ef0f9",
+              "name": "query_original",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.query_original }}",
+              "type": "string"
+            },
+            {
+              "id": "44f42f6f-0b3c-4e9d-ba46-2b72c33422d2",
+              "name": "contexto_airtable",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "1afb52c8-dc9a-4841-8827-a0b535fd0fa5",
+              "name": "intento",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.intento }}",
+              "type": "string"
+            },
+            {
+              "id": "71d60588-4c37-4dc3-a62f-ce2ffc4b5ef4",
+              "name": "estado_veredicto",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.estado_veredicto }}",
+              "type": "string"
+            },
+            {
+              "id": "44b895c6-72d3-458d-ac21-1a20c222b5a2",
+              "name": "exactitud_factual",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.exactitud_factual }}",
+              "type": "number"
+            },
+            {
+              "id": "dfe80426-c2c2-418f-8b0e-7b9136080945",
+              "name": "costo_unitario_llm",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.costo_unitario_llm }}",
+              "type": "string"
+            },
+            {
+              "id": "2a291419-835b-42e5-9c06-319401026682",
+              "name": "respuesta_candidata",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.respuesta_candidata }}",
+              "type": "string"
+            },
+            {
+              "id": "4ee0303c-7c0f-40cb-a666-f0271f933e2e",
+              "name": "channel",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "0dbf13d0-9c9c-44f7-a85f-2e28f15c942f",
+              "name": "user_name",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "821e40ee-6a68-4cac-b54f-5bbd970c9b0d",
+              "name": "from_email",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.from_email }}",
+              "type": "string"
+            },
+            {
+              "id": "e729ea06-c83e-48e0-86a3-2e45cc445ff2",
+              "name": "subject",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "1d73357f-f585-4054-a5d5-54e1f12e595f",
+              "name": "message_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "970e0694-116c-43a0-94b4-7a810fed0ddc",
+              "name": "thread_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.thread_id }}",
+              "type": "string"
+            },
+            {
+              "id": "5e17236d-b423-43d8-9c22-37dff71a46a0",
+              "name": "costo_unitario_llm",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.costo_unitario_llm }}",
+              "type": "string"
+            },
+            {
+              "id": "19557641-40ed-40ff-9aa5-3613f59840da",
+              "name": "llm_calls",
+              "value": "={{ $json.fields.LLM_Calls }}",
+              "type": "number"
+            },
+            {
+              "id": "ed195b45-46eb-46d7-93bf-8795488ea435",
+              "name": "trace_id",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.trace_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2112,
+        16
+      ],
+      "id": "52c49f6e-1e08-4d5a-99af-c7006860c5f8",
+      "name": "Set - Preparar HITL Intento 1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9fdeca10-16c8-47ef-9b75-f23b725e225d",
+              "name": "qa_release",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "ee7bcb49-fcef-44c9-b93a-31617d71d54c",
+              "name": "qa_status",
+              "value": "WAITING_HUMAN",
+              "type": "string"
+            },
+            {
+              "id": "74943329-02bd-49e3-b965-4a1464b53240",
+              "name": "session_id",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "a461e72b-6c43-4f0c-906b-bb81162593b1",
+              "name": "arquitectura",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "64b3f878-6a6c-4e43-8af4-230c4d3d9596",
+              "name": "route",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.route }}",
+              "type": "string"
+            },
+            {
+              "id": "1354e559-0d8d-45b0-beaa-a3ea1f22419a",
+              "name": "worker",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.worker }}",
+              "type": "string"
+            },
+            {
+              "id": "5e797404-813b-4a0c-a3b8-e730d45a9bee",
+              "name": "query_original",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.query_original }}",
+              "type": "string"
+            },
+            {
+              "id": "ee503799-014c-4fa2-96d7-958c7e693747",
+              "name": "contexto_airtable",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "a9ce3400-4519-49f1-b379-c9c78c4731d5",
+              "name": "respuesta_candidata",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.respuesta_candidata }}",
+              "type": "string"
+            },
+            {
+              "id": "d761cc5c-4aac-4eba-aa35-4e73d4f7fadf",
+              "name": "exactitud_factual",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.exactitud_factual }}",
+              "type": "number"
+            },
+            {
+              "id": "7e601f00-4ca9-4d41-83d2-416ef9f808b7",
+              "name": "estado_veredicto",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.estado_veredicto }}",
+              "type": "string"
+            },
+            {
+              "id": "5217eaa1-57e7-4ad3-baff-130c1043c581",
+              "name": "channel",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "248197ca-1b42-407a-9e4e-51f53ee7efb9",
+              "name": "user_name",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "0fe0a27f-8d28-4a7a-adc7-a070231f935a",
+              "name": "from_email",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.from_email }}",
+              "type": "string"
+            },
+            {
+              "id": "994716a9-03fd-4035-8a78-dd760eb3e929",
+              "name": "subject",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "4f8b5205-25b7-43de-9248-3a5373d01e6e",
+              "name": "message_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "376cc5db-07b3-45c6-967d-b7d255f8386a",
+              "name": "thread_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.thread_id }}",
+              "type": "string"
+            },
+            {
+              "id": "413fc386-962f-4843-a017-f9645927b019",
+              "name": "intento",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.intento }}",
+              "type": "number"
+            },
+            {
+              "id": "0d66ba2c-994b-4162-9bf6-a0ca24ec110f",
+              "name": "llm_calls",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.llm_calls }}",
+              "type": "string"
+            },
+            {
+              "id": "ea5dbda4-885a-4939-bca1-588d9b325a91",
+              "name": "costo_estimado_usd",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.costo_estimado_usd }}",
+              "type": "string"
+            },
+            {
+              "id": "5d2cc42b-3a91-423d-ba5d-bf7f1734a59e",
+              "name": "trace_id",
+              "value": "={{ $('Set - Resultado Juez 2').item.json.trace_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3088,
+        -224
+      ],
+      "id": "8d8efeb4-0349-48a0-8969-046ee9b25b20",
+      "name": "Set - Preparar HITL Intento 2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "80a19e57-f9c2-4e64-8505-1ac942a3059d",
+              "name": "session_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "43bfe0fc-608e-4932-8de0-ed95c281b57a",
+              "name": "arquitectura",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "c9865452-ce6d-4b8e-940c-8aa6d763edc1",
+              "name": "query_original",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.query_original }}",
+              "type": "string"
+            },
+            {
+              "id": "96170bed-3f20-48ac-88c3-8f655bb61910",
+              "name": "route",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.route }}",
+              "type": "string"
+            },
+            {
+              "id": "ef9c0e6c-5fe5-47f4-b115-77355209ac59",
+              "name": "contexto_airtable",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "8a6fabbd-c703-486f-82e9-649614abaaef",
+              "name": "channel",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "5df516ec-8c91-4058-be0d-29ee79e7baab",
+              "name": "user_name",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "7ab7ccec-b904-485b-af24-d19f7b1bd9ca",
+              "name": "from_email",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.from_email }}",
+              "type": "string"
+            },
+            {
+              "id": "811c6e44-8dd0-4567-a519-025cc0dddbf2",
+              "name": "subject",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "5e677f13-fa54-4096-bae7-407a0cbd9d77",
+              "name": "message_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "6ebc51b8-8d6b-4b06-8443-13d85315231c",
+              "name": "thread_id",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.thread_id }}",
+              "type": "string"
+            },
+            {
+              "id": "1b9b44ee-ebf5-4ea5-9d45-63a01f45ccf2",
+              "name": "worker",
+              "value": "={{ $('Set - Preparar Evaluacion').item.json.worker }}",
+              "type": "string"
+            },
+            {
+              "id": "fd48b9ba-aa0d-40de-850d-e28d033c1993",
+              "name": "intento",
+              "value": "={{ $json.intento }}",
+              "type": "string"
+            },
+            {
+              "id": "ca563d3e-3f05-4387-a506-58583e2f6a3a",
+              "name": "estado_veredicto",
+              "value": "={{ $json.estado_veredicto }}",
+              "type": "string"
+            },
+            {
+              "id": "1e229a26-7a58-40ae-93fe-88d96fc2198d",
+              "name": "exactitud_factual",
+              "value": "={{ $json.exactitud_factual }}",
+              "type": "number"
+            },
+            {
+              "id": "2e0df192-112f-463a-ade7-dbddda0242f5",
+              "name": "costo_unitario_llm",
+              "value": "={{ $json.costo_unitario_llm }}",
+              "type": "string"
+            },
+            {
+              "id": "cbbd1a9c-e5fd-4ed9-b633-0a9b2577180f",
+              "name": "respuesta_candidata",
+              "value": "={{ $json.respuesta_candidata }}",
+              "type": "string"
+            },
+            {
+              "id": "5649ebfd-e14f-4d72-bd20-d78dc2acab4a",
+              "name": "llm_calls",
+              "value": "={{ $json.llm_calls }}",
+              "type": "number"
+            },
+            {
+              "id": "3bd6dfaa-d2ad-4d5d-b783-1ce28f78487b",
+              "name": "trace_id",
+              "value": "={{ $('Set - Resultado Juez 1').item.json.trace_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3216,
+        16
+      ],
+      "id": "67ec378a-fd0e-4674-a8c2-a4ebd881e40f",
+      "name": "Set - Contrato HITL Común"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        2096,
+        -160
+      ],
+      "id": "c2fcd7ea-c4b0-4047-aa6e-88298a9123d5",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "CREDENTIALS_PLACEHOLDER",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n### Rama Arquitectura B\n**LEGADO M8 - NO UTILIZADO EN PRODUCCIÓN FINAL**",
+        "height": 432,
+        "width": 400
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        736,
+        -208
+      ],
+      "typeVersion": 1,
+      "id": "d4ed716d-ddcf-40bb-b0e0-1a9066b6a8d8",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b1a35548-1cd1-4a5a-a384-82494b8f82ad",
+              "name": "trace_id",
+              "value": "={{ $json.trace_id }}",
+              "type": "string"
+            },
+            {
+              "id": "8cef9962-37fa-4409-aff7-f2f8ee22788c",
+              "name": "session_id",
+              "value": "={{ $json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "e19ccd38-0fc8-4fbd-8b98-ebb51314e7b0",
+              "name": "message_id",
+              "value": "={{ $json.message_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b5ba4bfd-a643-44ff-9be1-7b8df07c30b8",
+              "name": "exactitud_factual",
+              "value": "={{ Number($json.exactitud_factual) }}",
+              "type": "number"
+            },
+            {
+              "id": "e4a8e364-cbf5-49a0-9c48-89ec33eaf7c0",
+              "name": "estado_veredicto",
+              "value": "={{ $json.estado_veredicto }}",
+              "type": "string"
+            },
+            {
+              "id": "b4d3f961-d436-44ea-9d2a-a09e58b787e4",
+              "name": "respuesta_final",
+              "value": "={{ $json.respuesta_final }}",
+              "type": "string"
+            },
+            {
+              "id": "7efcdbff-0022-4d7f-a9fb-9e61c03f1139",
+              "name": "route",
+              "value": "={{ $json.route }}",
+              "type": "string"
+            },
+            {
+              "id": "8a213a7f-7067-4d3b-b47b-f100b395f257",
+              "name": "worker",
+              "value": "={{ $json.worker }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3808,
+        -400
+      ],
+      "id": "ef492c37-3686-4243-a2da-bcca1f4a0ff9",
+      "name": "Set - Salida Supervisor Final"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Entrada Supervisor QA M8": {
+      "main": [
+        [
+          {
+            "node": "Airtable - Buscar Contexto QA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable - Buscar Contexto QA": {
+      "main": [
+        [
+          {
+            "node": "Set - Preparar Evaluacion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set - Preparar Evaluacion": {
+      "main": [
+        [
+          {
+            "node": "IF - Contexto Disponible",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Contexto Disponible": {
+      "main": [
+        [
+          {
+            "node": "Switch - Arquitectura A/B",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set - HITL Sin Contexto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch - Arquitectura A/B": {
+      "main": [
+        [
+          {
+            "node": "Set - Candidato A",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LLM - Refinar Arquitectura B",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set - Candidato A": {
+      "main": [
+        [
+          {
+            "node": "LLM - Juez QA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "LLM - Refinar Arquitectura B",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM - Refinar Arquitectura B": {
+      "main": [
+        [
+          {
+            "node": "Set - Candidato B",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set - Candidato B": {
+      "main": [
+        [
+          {
+            "node": "LLM - Juez QA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "LLM - Juez QA",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser - JUEZ": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "LLM - Juez QA",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM - Juez QA": {
+      "main": [
+        [
+          {
+            "node": "Set - Resultado Juez 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set - Resultado Juez 1": {
+      "main": [
+        [
+          {
+            "node": "Airtable - Log QA Intento 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable - Log QA Intento 1": {
+      "main": [
+        [
+          {
+            "node": "Switch - Veredicto QA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch - Veredicto QA": {
+      "main": [
+        [
+          {
+            "node": "IF - Exactitud Aceptable",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LLM - Self Healing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set - Preparar HITL Intento 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Exactitud Aceptable": {
+      "main": [
+        [
+          {
+            "node": "Set - QA Aprobado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "LLM - Self Healing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM - Self Healing": {
+      "main": [
+        [
+          {
+            "node": "LLM - Juez QA Reintento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "LLM - Juez QA Reintento",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser - Juez 2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "LLM - Juez QA Reintento",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM - Juez QA Reintento": {
+      "main": [
+        [
+          {
+            "node": "Set - Resultado Juez 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set - Resultado Juez 2": {
+      "main": [
+        [
+          {
+            "node": "Airtable - Log QA Intento 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Reintento Aceptado": {
+      "main": [
+        [
+          {
+            "node": "Set - QA Aprobado Reintento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set - Preparar HITL Intento 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable - Log QA Intento 2": {
+      "main": [
+        [
+          {
+            "node": "IF - Reintento Aceptado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - Aprobación Humana QA": {
+      "main": [
+        [
+          {
+            "node": "IF - Humano Aprueba QA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF - Humano Aprueba QA": {
+      "main": [
+        [
+          {
+            "node": "Set - QA Aprobado Humano",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set - QA Rechazado Humano",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set - QA Rechazado Humano": {
+      "main": [
+        []
+      ]
+    },
+    "Set - Preparar HITL Intento 2": {
+      "main": [
+        [
+          {
+            "node": "Set - Contrato HITL Común",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set - Preparar HITL Intento 1": {
+      "main": [
+        [
+          {
+            "node": "Set - Contrato HITL Común",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set - Contrato HITL Común": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Aprobación Humana QA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "LLM - Self Healing",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set - QA Aprobado": {
+      "main": [
+        [
+          {
+            "node": "Set - Salida Supervisor Final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set - QA Aprobado Reintento": {
+      "main": [
+        [
+          {
+            "node": "Set - Salida Supervisor Final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set - QA Aprobado Humano": {
+      "main": [
+        [
+          {
+            "node": "Set - Salida Supervisor Final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "versionId",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "instanceId"
+  },
+  "nodeGroups": [],
+  "id": "LrhXWT5FE431Vuei",
+  "tags": []
+}
