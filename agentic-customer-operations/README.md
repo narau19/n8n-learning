@@ -57,3 +57,7 @@ Credential references and infrastructure identifiers have been replaced with pla
 ## Disclaimer
 
 This is a portfolio and educational implementation based on a fictional company and synthetic business data. Production deployment would require environment-specific security, monitoring, access control and compliance review.
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
